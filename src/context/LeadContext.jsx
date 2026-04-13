@@ -22,20 +22,26 @@ const mapFromDb = (dbLead) => ({
   notes: dbLead.notes
 });
 
-// Fonction inverse (du frontend vers Supabase)
-const mapToDb = (lead) => ({
-  contact_name: lead.contactName,
-  email: lead.email,
-  phone: lead.phone,
-  product_type: lead.productType,
-  situation: lead.situation,
-  source: lead.source,
-  status: lead.status === 'Converti' ? 'gagne' :
-          lead.status === 'En cours' ? 'en_cours' :
-          lead.status === 'Nouveau' ? 'nouveau' : 'perdu',
-  commission: lead.commissionAmount || 0,
-  notes: lead.notes || ''
-});
+const mapToDb = (lead) => {
+  const db = {};
+  if (lead.contactName !== undefined) db.contact_name = lead.contactName;
+  if (lead.email !== undefined) db.email = lead.email;
+  if (lead.phone !== undefined) db.phone = lead.phone;
+  if (lead.productType !== undefined) db.product_type = lead.productType;
+  if (lead.situation !== undefined) db.situation = lead.situation;
+  if (lead.source !== undefined) db.source = lead.source;
+  
+  if (lead.status !== undefined) {
+    db.status = lead.status === 'Converti' ? 'gagne' :
+                lead.status === 'En cours' ? 'en_cours' :
+                lead.status === 'Nouveau' ? 'nouveau' : 'perdu';
+  }
+  
+  if (lead.commissionAmount !== undefined) db.commission = lead.commissionAmount;
+  if (lead.notes !== undefined) db.notes = lead.notes;
+  
+  return db;
+};
 
 export function LeadProvider({ children }) {
   const [allLeads, setAllLeads] = useState([]);

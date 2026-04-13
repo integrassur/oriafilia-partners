@@ -88,7 +88,7 @@ export default function LeadTable({ onSelectLead }) {
         </div>
 
         <div className="table-filters">
-          {user?.role === 'Administrateur' && (
+          {user?.role === 'admin' && (
             <select
               className="filter-select"
               value={adminPartnerFilter}

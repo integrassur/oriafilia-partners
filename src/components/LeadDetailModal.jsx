@@ -1,21 +1,27 @@
 import { useState } from 'react';
 import { X } from 'lucide-react';
 import { useLeads } from '../context/LeadContext';
+import { useAuth } from '../context/AuthContext';
 import { STATUSES } from '../utils/seedData';
 import { formatDate, formatCurrency } from '../utils/helpers';
 import StatusBadge from './StatusBadge';
 
 export default function LeadDetailModal({ lead, onClose }) {
-  const { updateLeadStatus } = useLeads();
+  const { updateLeadStatus, updateLead } = useLeads();
+  const { user } = useAuth();
   const [newStatus, setNewStatus] = useState(lead.status);
+  const [adminNotes, setAdminNotes] = useState(lead.notes || '');
 
   if (!lead) return null;
 
   const handleStatusChange = () => {
     if (newStatus !== lead.status) {
       updateLeadStatus(lead.id, newStatus);
-      onClose();
     }
+    if (user?.role === 'admin' && adminNotes !== lead.notes) {
+      updateLead(lead.id, { notes: adminNotes });
+    }
+    onClose();
   };
 
   return (
@@ -69,8 +75,26 @@ export default function LeadDetailModal({ lead, onClose }) {
               <span className="detail-value">{formatDate(lead.createdAt)}</span>
             </div>
             <div className="detail-item full-width">
-              <span className="detail-label">Notes</span>
-              <span className="detail-value">{lead.notes || 'Aucune note'}</span>
+              <span className="detail-label">Notes de l'Administrateur</span>
+              {user?.role === 'admin' ? (
+                <textarea
+                  className="form-textarea"
+                  value={adminNotes}
+                  onChange={(e) => setAdminNotes(e.target.value)}
+                  placeholder="Laisser un retour au partenaire..."
+                  style={{ marginTop: '8px' }}
+                />
+              ) : (
+                <span className="detail-value" style={{ 
+                  backgroundColor: 'var(--color-bg-secondary)', 
+                  padding: '12px', 
+                  borderRadius: '6px', 
+                  display: 'block',
+                  marginTop: '4px'
+                }}>
+                  {lead.notes || "Aucun retour n'a encore été laissé sur ce prospect."}
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -92,10 +116,10 @@ export default function LeadDetailModal({ lead, onClose }) {
           <button
             className="btn btn-primary btn-sm"
             onClick={handleStatusChange}
-            disabled={newStatus === lead.status}
+            disabled={newStatus === lead.status && adminNotes === (lead.notes || '')}
             id="update-status-btn"
           >
-            Mettre à jour
+            Vérifier & Mettre à jour
           </button>
         </div>
       </div>
