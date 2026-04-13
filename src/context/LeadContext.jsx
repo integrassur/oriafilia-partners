@@ -7,12 +7,12 @@ const LeadContext = createContext(null);
 // Fonction de mapping pour passer de la base de données (snake_case) au frontend (camelCase)
 const mapFromDb = (dbLead) => ({
   id: dbLead.id,
-  firstName: dbLead.first_name,
-  lastName: dbLead.last_name,
+  contactName: dbLead.contact_name,
+  email: dbLead.email,
   phone: dbLead.phone,
-  clientType: dbLead.client_type,
-  hasInsurance: dbLead.has_insurance,
-  postalCode: dbLead.postal_code,
+  productType: dbLead.product_type,
+  situation: dbLead.situation,
+  source: dbLead.source,
   partnerId: dbLead.partner_id,
   status: dbLead.status === 'gagne' ? 'Converti' : 
           dbLead.status === 'en_cours' ? 'En cours' : 
@@ -24,12 +24,12 @@ const mapFromDb = (dbLead) => ({
 
 // Fonction inverse (du frontend vers Supabase)
 const mapToDb = (lead) => ({
-  first_name: lead.firstName,
-  last_name: lead.lastName,
+  contact_name: lead.contactName,
+  email: lead.email,
   phone: lead.phone,
-  client_type: lead.clientType,
-  has_insurance: lead.hasInsurance,
-  postal_code: lead.postalCode,
+  product_type: lead.productType,
+  situation: lead.situation,
+  source: lead.source,
   status: lead.status === 'Converti' ? 'gagne' :
           lead.status === 'En cours' ? 'en_cours' :
           lead.status === 'Nouveau' ? 'nouveau' : 'perdu',
@@ -94,13 +94,16 @@ export function LeadProvider({ children }) {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Erreur d'ajout de lead:", error);
+        throw error;
+      }
       
       const newFrontendLead = mapFromDb(data);
       setAllLeads(prev => [newFrontendLead, ...prev]);
       return newFrontendLead;
     } catch (error) {
-      console.error("Erreur d'ajout de lead :", error);
+      console.error('Erreur addLead:', error.message);
       throw error;
     }
   };

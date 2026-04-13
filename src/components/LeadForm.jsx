@@ -58,23 +58,26 @@ export default function LeadForm() {
     return Object.keys(errs).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
-    addLead({
-      contactName: form.contactName.trim(),
-      email: form.email.trim(),
-      phone: form.phone.trim(),
-      productType: form.productType,
-      situation: form.situation.trim(),
-      source: form.source,
-      estimatedPremium: 0,
-      commissionRate: DEFAULT_RATES[form.productType] || 10,
-      notes: form.notes.trim(),
-    });
-
-    setSubmitted(true);
+    try {
+      await addLead({
+        contactName: form.contactName.trim(),
+        email: form.email.trim(),
+        phone: form.phone.trim(),
+        productType: form.productType,
+        situation: form.situation.trim(),
+        source: form.source,
+        estimatedPremium: 0,
+        commissionRate: DEFAULT_RATES[form.productType] || 10,
+        notes: form.notes.trim(),
+      });
+      setSubmitted(true);
+    } catch (err) {
+      alert("Une erreur est survenue lors de l'envoi. Veuillez réessayer.");
+    }
   };
 
   if (submitted) {
