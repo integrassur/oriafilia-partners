@@ -4,6 +4,7 @@ import { LeadProvider } from './context/LeadContext';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 import LoginPage from './pages/LoginPage';
+import InvitePage from './pages/InvitePage';
 import DashboardPage from './pages/DashboardPage';
 import SubmitLeadPage from './pages/SubmitLeadPage';
 import TrackLeadsPage from './pages/TrackLeadsPage';
@@ -17,6 +18,7 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/login" element={user ? <Navigate to="/" replace /> : <LoginPage />} />
+      <Route path="/invite/:token" element={<InvitePage />} />
       <Route element={
         <ProtectedRoute>
           <LeadProvider>
