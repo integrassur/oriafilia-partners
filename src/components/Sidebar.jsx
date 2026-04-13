@@ -44,7 +44,7 @@ export default function Sidebar() {
           </NavLink>
         ))}
 
-        {user?.role === 'Administrateur' && (
+        {user?.role === 'admin' && (
           <>
             <span className="sidebar-section-label" style={{ marginTop: '24px' }}>Administration</span>
             <NavLink

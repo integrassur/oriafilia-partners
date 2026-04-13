@@ -33,7 +33,7 @@ export default function DashboardPage() {
         </div>
         
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-          {user?.role === 'Administrateur' && (
+          {user?.role === 'admin' && (
             <select 
               className="form-select" 
               value={adminPartnerFilter} 
@@ -41,7 +41,7 @@ export default function DashboardPage() {
               style={{ padding: '8px 14px', minWidth: '200px' }}
             >
               <option value="">Tous les partenaires</option>
-              {partners && partners.filter(p => p.role === 'Partner').map(p => (
+              {partners && partners.filter(p => p.role === 'partner').map(p => (
                 <option key={p.id} value={p.id}>{p.name} ({p.email})</option>
               ))}
             </select>
