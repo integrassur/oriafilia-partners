@@ -41,26 +41,28 @@ export default function InvitePage() {
 
     setSubmitting(true);
     try {
-      // 1. Créer le compte Supabase Auth
+      // 1. Créer le compte Supabase Auth (email vient de l'invitation)
       const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email: invitation.email,
         password: form.password,
         options: {
-          data: { full_name: form.full_name }
+          data: { full_name: form.full_name.trim() }
         }
       });
 
       if (signUpError) throw signUpError;
 
-      // 2. Mettre à jour le profil avec le nom et le rôle partner
+      // 2. Mettre à jour le profil avec le nom complet (le trigger crée le profil de base)
       const userId = signUpData.user?.id;
       if (userId) {
-        await supabase.from('profiles').upsert({
-          id: userId,
-          email: invitation.email,
-          full_name: form.full_name.trim(),
-          role: 'partner'
-        });
+        // Attendre un court instant pour que le trigger s'exécute
+        await new Promise(r => setTimeout(r, 500));
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .update({ full_name: form.full_name.trim() })
+          .eq('id', userId);
+        
+        if (profileError) console.warn('Profile update warning:', profileError.message);
       }
 
       // 3. Marquer l'invitation comme utilisée
@@ -77,7 +79,6 @@ export default function InvitePage() {
     }
   };
 
-  // --- Écrans d'état ---
   const screenStyle = {
     minHeight: '100vh',
     display: 'flex',
@@ -100,7 +101,7 @@ export default function InvitePage() {
   if (step === 'loading') return (
     <div style={screenStyle}>
       <div style={cardStyle}>
-        <Loader size={40} style={{ margin: '0 auto 16px', opacity: 0.5, animation: 'spin 1s linear infinite' }} />
+        <Loader size={40} style={{ margin: '0 auto 16px', opacity: 0.5 }} />
         <p style={{ color: 'var(--color-text-muted)' }}>Vérification de votre invitation...</p>
       </div>
     </div>
@@ -132,8 +133,11 @@ export default function InvitePage() {
       <div style={cardStyle}>
         <CheckCircle size={48} style={{ margin: '0 auto 16px', color: 'var(--color-green)' }} />
         <h2 style={{ marginBottom: '12px' }}>Compte créé avec succès !</h2>
-        <p style={{ color: 'var(--color-text-muted)', marginBottom: '24px' }}>
-          Bienvenue sur Oriafilia Partners. Vous pouvez maintenant vous connecter avec votre email et mot de passe.
+        <p style={{ color: 'var(--color-text-muted)', marginBottom: '8px' }}>
+          Bienvenue sur Oriafilia Partners.
+        </p>
+        <p style={{ color: 'var(--color-text-muted)', marginBottom: '24px', fontSize: '0.9rem' }}>
+          Connectez-vous avec votre adresse e-mail <strong>{invitation?.email}</strong> et le mot de passe que vous venez de choisir.
         </p>
         <button className="btn btn-primary" onClick={() => navigate('/login')}>Se connecter</button>
       </div>
@@ -151,9 +155,9 @@ export default function InvitePage() {
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             margin: '0 auto 16px', fontSize: '24px'
           }}>🤝</div>
-          <h1 style={{ fontSize: '1.5rem', marginBottom: '8px' }}>Rejoindre Oriafilia Partners</h1>
-          <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
-            Vous avez été invité avec <strong>{invitation?.email}</strong>
+          <h1 style={{ fontSize: '1.5rem', marginBottom: '8px' }}>Créer votre compte Partenaire</h1>
+          <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
+            Complétez les informations ci-dessous pour activer votre accès.
           </p>
         </div>
 
@@ -164,14 +168,30 @@ export default function InvitePage() {
             </div>
           )}
 
+          {/* Email visible et verrouillé — c'est le login */}
+          <div className="form-group">
+            <label>Adresse e-mail (identifiant de connexion)</label>
+            <input
+              type="email"
+              className="form-input"
+              value={invitation?.email || ''}
+              readOnly
+              style={{ opacity: 0.7, cursor: 'not-allowed', backgroundColor: 'var(--color-bg)' }}
+            />
+            <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '4px', display: 'block' }}>
+              Cet email est votre identifiant de connexion — il ne peut pas être modifié.
+            </span>
+          </div>
+
           <div className="form-group">
             <label>Votre nom complet *</label>
             <input
               type="text"
               className="form-input"
-              placeholder="Jean Dupont"
+              placeholder="Ex : Marc Touka"
               value={form.full_name}
               onChange={e => setForm({ ...form, full_name: e.target.value })}
+              autoFocus
             />
           </div>
 
@@ -197,7 +217,7 @@ export default function InvitePage() {
             />
           </div>
 
-          <button type="submit" className="btn btn-primary btn-lg" disabled={submitting} style={{ marginTop: '8px' }}>
+          <button type="submit" className="btn btn-primary" disabled={submitting} style={{ marginTop: '8px', padding: '14px' }}>
             {submitting ? 'Création en cours...' : 'Créer mon compte'}
           </button>
         </form>

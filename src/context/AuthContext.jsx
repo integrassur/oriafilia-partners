@@ -64,12 +64,12 @@ export function AuthProvider({ children }) {
   };
 
   const fetchPartners = async () => {
-    const { data } = await supabase.from('profiles').select('*');
+    const { data, error } = await supabase.from('profiles').select('*');
+    if (error) { console.error('fetchPartners error:', error); return; }
     if (data) {
-      // Formater pour coller avec notre ancienne démo (AdminUsersPage)
       const formatted = data.map(p => ({
         id: p.id,
-        name: p.email.split('@')[0],
+        name: p.full_name || p.email.split('@')[0], // préfère full_name
         email: p.email,
         role: p.role,
         status: p.status,
