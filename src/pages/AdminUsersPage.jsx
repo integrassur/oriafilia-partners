@@ -1,13 +1,48 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../config/supabaseClient';
-import { Users, Mail, Calendar, Shield, Link, Copy, Check, X } from 'lucide-react';
+import { Users, Mail, Calendar, Shield, Link, Copy, Check, X, AlertCircle, Eye } from 'lucide-react';
 
 const APP_URL = 'https://oriafilia-partners.vercel.app';
 
 export default function AdminUsersPage() {
-  const { user, partners, updateUserRole } = useAuth();
+  const { user, partners, updateUserRole, togglePartnerStatus, resetPartnerPassword } = useAuth();
   const [roleChangeModal, setRoleChangeModal] = useState(null);
+  const [selectedPartner, setSelectedPartner] = useState(null);
+  const [copiedIban, setCopiedIban] = useState(false);
+  const [newPassword, setNewPassword] = useState('');
+  const [resetPasswordStatus, setResetPasswordStatus] = useState('');
+  const [isTogglingStatus, setIsTogglingStatus] = useState(false);
+
+  const isProfileComplete = (p) => {
+    if (p.role === 'admin') return true;
+    return !!(p.full_name && p.phone && p.address && p.siret && p.orias && p.iban);
+  };
+
+  const handleToggleStatus = async () => {
+    if (!selectedPartner) return;
+    setIsTogglingStatus(true);
+    const { error } = await togglePartnerStatus(selectedPartner.id, selectedPartner.status || 'active');
+    if (!error) {
+       setSelectedPartner({ ...selectedPartner, status: selectedPartner.status === 'active' ? 'inactive' : 'active' });
+    }
+    setIsTogglingStatus(false);
+  };
+
+  const handleResetPassword = async () => {
+    if (!newPassword || newPassword.length < 6) {
+      setResetPasswordStatus('Le mot de passe doit contenir au moins 6 caractères');
+      return;
+    }
+    setResetPasswordStatus('loading');
+    const { error } = await resetPartnerPassword(selectedPartner.id, newPassword);
+    if (error) {
+      setResetPasswordStatus('Erreur : ' + error.message);
+    } else {
+      setResetPasswordStatus('success');
+      setNewPassword('');
+    }
+  };
 
   // Invitation state
   const [showInviteModal, setShowInviteModal] = useState(false);
@@ -96,6 +131,7 @@ export default function AdminUsersPage() {
               <th>Email</th>
               <th>Rôle</th>
               <th>Date d'inscription</th>
+              <th style={{ width: '100px', textAlign: 'right' }}>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -112,7 +148,14 @@ export default function AdminUsersPage() {
                     {(p.name || p.email).charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <div style={{ fontWeight: 500 }}>{p.name || '—'}</div>
+                    <div style={{ fontWeight: 500, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      {p.name || '—'}
+                      {!isProfileComplete(p) && (
+                        <span title="Profil incomplet (informations réglementaires manquantes)" style={{ color: '#f59e0b', display: 'flex' }}>
+                          <AlertCircle size={14} />
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </td>
                 <td>
@@ -144,6 +187,11 @@ export default function AdminUsersPage() {
                     <Calendar size={14} style={{ opacity: 0.5 }} />
                     {new Date(p.joinedAt).toLocaleDateString('fr-FR')}
                   </span>
+                </td>
+                <td style={{ textAlign: 'right' }}>
+                  <button className="btn btn-secondary btn-sm" onClick={() => setSelectedPartner(p)} style={{ padding: '6px 10px', fontSize: '0.8rem' }}>
+                    <Eye size={14} style={{ marginRight: '4px' }} /> Profil
+                  </button>
                 </td>
               </tr>
             ))}
@@ -251,6 +299,161 @@ export default function AdminUsersPage() {
             <div className="form-actions" style={{ justifyContent: 'flex-end', marginTop: '20px' }}>
               <button className="btn btn-secondary" onClick={() => setRoleChangeModal(null)}>Annuler</button>
               <button className="btn btn-primary" onClick={confirmRoleChange}>Confirmer</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal - Détails Partenaire */}
+      {selectedPartner && (
+        <div className="modal-overlay" onClick={() => setSelectedPartner(null)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '540px' }}>
+            <div className="modal-header">
+              <h2 style={{ fontSize: '1.25rem' }}>Profil complet du partenaire</h2>
+              <button className="modal-close" onClick={() => setSelectedPartner(null)}><X size={18} /></button>
+            </div>
+            
+            <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+               <div style={{ display: 'flex', alignItems: 'center', gap: '16px', borderBottom: '1px solid var(--color-border)', paddingBottom: '20px' }}>
+                  <div style={{
+                    width: '56px', height: '56px', borderRadius: '50%',
+                    background: selectedPartner.role === 'admin' 
+                      ? 'linear-gradient(135deg, rgba(244,63,94,0.1), rgba(249,115,22,0.1))'
+                      : 'linear-gradient(135deg, rgba(16,194,126,0.15), rgba(14,165,233,0.15))',
+                    color: selectedPartner.role === 'admin' ? '#f43f5e' : 'var(--color-green)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontWeight: 700, fontSize: '1.4rem'
+                  }}>
+                    {(selectedPartner.name || selectedPartner.email).charAt(0).toUpperCase()}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <h3 style={{ margin: '0 0 4px 0', fontSize: '1.1rem' }}>{selectedPartner.name || 'Non renseigné'}</h3>
+                    <div style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <Mail size={14} /> {selectedPartner.email}
+                    </div>
+                  </div>
+                  {!isProfileComplete(selectedPartner) && (
+                    <span className="status-badge perdu" style={{ background: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b', border: '1px solid rgba(245, 158, 11, 0.2)' }}>
+                      Incomplet
+                    </span>
+                  )}
+               </div>
+
+               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                 <div>
+                   <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', marginBottom: '6px', fontWeight: 600, letterSpacing: '0.05em' }}>Téléphone</div>
+                   <div style={{ fontSize: '0.95rem' }}>{selectedPartner.phone || <em className="text-muted">Non renseigné</em>}</div>
+                 </div>
+                 <div>
+                   <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', marginBottom: '6px', fontWeight: 600, letterSpacing: '0.05em' }}>Statut du compte</div>
+                   <div style={{ fontSize: '0.95rem' }}>
+                     {selectedPartner.status === 'active' 
+                       ? <span className="text-green flex gap-1"><Check size={16} /> Actif</span> 
+                       : <span style={{ color: '#ef4444' }}>Inactif</span>}
+                   </div>
+                 </div>
+                 
+                 <div style={{ gridColumn: '1 / -1' }}>
+                   <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', marginBottom: '6px', fontWeight: 600, letterSpacing: '0.05em' }}>Adresse Postale</div>
+                   <div style={{ fontSize: '0.95rem', lineHeight: 1.5 }}>{selectedPartner.address || <em className="text-muted">Non renseignée</em>}</div>
+                 </div>
+                 
+                 <div>
+                   <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', marginBottom: '6px', fontWeight: 600, letterSpacing: '0.05em' }}>N° SIRET</div>
+                   <div style={{ fontSize: '0.95rem', fontFamily: 'monospace' }}>{selectedPartner.siret || <em className="text-muted" style={{ fontFamily: 'var(--font-sans)' }}>Non renseigné</em>}</div>
+                 </div>
+                 <div>
+                   <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', marginBottom: '6px', fontWeight: 600, letterSpacing: '0.05em' }}>N° ORIAS</div>
+                   <div style={{ fontSize: '0.95rem', fontFamily: 'monospace' }}>{selectedPartner.orias || <em className="text-muted" style={{ fontFamily: 'var(--font-sans)' }}>Non renseigné</em>}</div>
+                 </div>
+                 
+                 <div style={{ gridColumn: '1 / -1', background: 'var(--color-bg)', padding: '20px', borderRadius: '12px', border: '1px solid var(--color-border)' }}>
+                   <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', marginBottom: '12px', fontWeight: 600, letterSpacing: '0.05em' }}>IBAN (Relevé d'Identité Bancaire)</div>
+                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.2)', padding: '12px 16px', borderRadius: '8px' }}>
+                     <code style={{ fontSize: '1rem', letterSpacing: '1px', wordBreak: 'break-all' }}>
+                       {selectedPartner.iban || <em className="text-muted" style={{ fontFamily: 'var(--font-sans)', letterSpacing: '0' }}>Non renseigné</em>}
+                     </code>
+                     {selectedPartner.iban && (
+                       <button className="btn btn-secondary btn-sm" onClick={() => {
+                         navigator.clipboard.writeText(selectedPartner.iban);
+                         setCopiedIban(true);
+                         setTimeout(() => setCopiedIban(false), 2000);
+                       }} style={{ flexShrink: 0, marginLeft: '12px' }}>
+                         {copiedIban ? <Check size={14} className="text-green" /> : <Copy size={14} />} Copier
+                       </button>
+                     )}
+                   </div>
+                 </div>
+
+                 {/* Master Control Section */}
+                 {selectedPartner.role !== 'admin' && (
+                   <div style={{ gridColumn: '1 / -1', marginTop: '16px', borderTop: '1px solid var(--color-border)', paddingTop: '24px' }}>
+                     <h4 style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', color: '#ef4444' }}>
+                        <Shield size={18} /> Actions Administratives (Master Control)
+                     </h4>
+                     
+                     <div style={{ padding: '20px', background: 'rgba(239, 68, 68, 0.05)', borderRadius: '12px', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid rgba(239, 68, 68, 0.1)' }}>
+                         <div>
+                           <strong style={{ display: 'block', marginBottom: '4px' }}>Statut du compte</strong>
+                           <span style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>Suspendre l'accès bloquera la connexion du courtier.</span>
+                         </div>
+                         <button 
+                           className={`btn ${selectedPartner.status === 'inactive' ? 'btn-primary' : 'btn-outline'}`} 
+                           onClick={handleToggleStatus}
+                           disabled={isTogglingStatus}
+                           style={{ borderColor: '#ef4444', color: selectedPartner.status === 'inactive' ? '#fff' : '#ef4444', background: selectedPartner.status === 'inactive' ? '#ef4444' : 'transparent' }}
+                         >
+                           {isTogglingStatus ? 'Chargement...' : selectedPartner.status === 'inactive' ? 'Réactiver le compte' : 'Suspendre le compte'}
+                         </button>
+                       </div>
+
+                       <div>
+                         <strong style={{ display: 'block', marginBottom: '12px' }}>Forcer un nouveau mot de passe</strong>
+                         <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '12px' }}>
+                           Définissez manuellement un mot de passe temporaire à communiquer personnellement au partenaire.
+                         </p>
+                         <div style={{ display: 'flex', gap: '12px', flexDirection: 'column' }}>
+                           <div style={{ display: 'flex', gap: '12px' }}>
+                             <input 
+                               type="text" 
+                               className="form-input" 
+                               placeholder="Nouveau mot de passe" 
+                               value={newPassword}
+                               onChange={(e) => { setNewPassword(e.target.value); setResetPasswordStatus(''); }}
+                               style={{ flex: 1, borderColor: 'rgba(239, 68, 68, 0.3)' }}
+                             />
+                             <button 
+                               className="btn btn-secondary" 
+                               onClick={handleResetPassword}
+                               disabled={!newPassword || resetPasswordStatus === 'loading'}
+                               style={{ color: '#ef4444', borderColor: 'rgba(239, 68, 68, 0.3)' }}
+                             >
+                               {resetPasswordStatus === 'loading' ? 'Mise à jour...' : 'Appliquer'}
+                             </button>
+                           </div>
+                           
+                           {resetPasswordStatus === 'success' && (
+                             <div className="text-green flex gap-1" style={{ fontSize: '0.875rem' }}>
+                               <Check size={16} /> Mot de passe mis à jour avec succès
+                             </div>
+                           )}
+                           
+                           {resetPasswordStatus && resetPasswordStatus !== 'loading' && resetPasswordStatus !== 'success' && (
+                             <div style={{ color: '#ef4444', fontSize: '0.875rem' }}>
+                               {resetPasswordStatus}
+                             </div>
+                           )}
+                         </div>
+                       </div>
+                     </div>
+                   </div>
+                 )}
+               </div>
+
+               <div className="form-actions" style={{ justifyContent: 'flex-end', marginTop: '16px' }}>
+                 <button className="btn btn-secondary" onClick={() => { setSelectedPartner(null); setNewPassword(''); setResetPasswordStatus(''); }}>Fermer</button>
+               </div>
             </div>
           </div>
         </div>

@@ -47,9 +47,15 @@ export function AuthProvider({ children }) {
         id: data.id,
         email: data.email,
         role: data.role, // 'admin' ou 'partner'
-        name: data.email.split('@')[0], // Fallback visuel
+        name: data.full_name || data.email.split('@')[0], // Fallback visuel
         status: data.status,
-        joinedAt: data.created_at
+        joinedAt: data.created_at,
+        full_name: data.full_name,
+        phone: data.phone,
+        siret: data.siret,
+        iban: data.iban,
+        orias: data.orias,
+        address: data.address
       });
       
       // Si l'utilisateur est admin, on charge son carnet de partenaires
@@ -73,7 +79,13 @@ export function AuthProvider({ children }) {
         email: p.email,
         role: p.role,
         status: p.status,
-        joinedAt: p.created_at
+        joinedAt: p.created_at,
+        full_name: p.full_name,
+        phone: p.phone,
+        siret: p.siret,
+        iban: p.iban,
+        orias: p.orias,
+        address: p.address
       }));
       setPartners(formatted);
     }
@@ -112,6 +124,22 @@ export function AuthProvider({ children }) {
     return data;
   };
 
+  const updateProfile = async (updates) => {
+    const { error } = await supabase
+      .from('profiles')
+      .update(updates)
+      .eq('id', user.id);
+      
+    if (!error) {
+      setUser(prev => ({ 
+        ...prev, 
+        ...updates, 
+        name: updates.full_name || prev.name 
+      }));
+    }
+    return { error };
+  };
+
   // Mettre à jour le rôle (nécessite que l'admin ait les droits UPDATE)
   const updateUserRole = async (userId, newRole) => {
     const { error } = await supabase
@@ -126,8 +154,35 @@ export function AuthProvider({ children }) {
     }
   };
 
+  // Mettre à jour le statut (Activer/Désactiver le compte)
+  const togglePartnerStatus = async (partnerId, currentStatus) => {
+    const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+    const { error } = await supabase
+      .from('profiles')
+      .update({ status: newStatus })
+      .eq('id', partnerId);
+      
+    if (!error) {
+      fetchPartners();
+    }
+    return { error };
+  };
+
+  // Réinitialiser le mot de passe via l'appel RPC (nécessite d'être admin)
+  const resetPartnerPassword = async (partnerId, newPassword) => {
+    const { error } = await supabase.rpc('admin_reset_password', {
+      target_user_id: partnerId,
+      new_password: newPassword
+    });
+    return { error };
+  };
+
   return (
-    <AuthContext.Provider value={{ user, partners, login, logout, addPartner, updateUserRole, error, setError, loading }}>
+    <AuthContext.Provider value={{ 
+      user, partners, login, logout, addPartner, updateProfile, 
+      updateUserRole, togglePartnerStatus, resetPartnerPassword, 
+      error, setError, loading 
+    }}>
       {!loading && children}
     </AuthContext.Provider>
   );

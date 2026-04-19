@@ -96,7 +96,7 @@ export default function LeadTable({ onSelectLead }) {
               id="admin-partner-filter"
             >
               <option value="">Tous les partenaires</option>
-              {partners && partners.filter(p => p.role === 'Partner').map(p => (
+              {partners && partners.filter(p => p.role === 'partner').map(p => (
                 <option key={p.id} value={p.id}>{p.name} ({p.email})</option>
               ))}
             </select>

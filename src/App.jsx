@@ -11,6 +11,7 @@ import TrackLeadsPage from './pages/TrackLeadsPage';
 import CommissionsPage from './pages/CommissionsPage';
 import ProfilePage from './pages/ProfilePage';
 import AdminUsersPage from './pages/AdminUsersPage';
+import AdminLeadsPage from './pages/AdminLeadsPage';
 
 function AppRoutes() {
   const { user } = useAuth();
@@ -32,6 +33,7 @@ function AppRoutes() {
         <Route path="/commissions" element={<CommissionsPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/admin/users" element={<AdminUsersPage />} />
+        <Route path="/admin/leads" element={<AdminLeadsPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

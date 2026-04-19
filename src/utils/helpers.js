@@ -116,7 +116,7 @@ export function exportToCSV(leads, filename = 'leads_export.csv') {
  * Calculate commission stats for a set of leads
  */
 export function calcCommissionStats(leads) {
-  const converted = leads.filter(l => l.status === 'Converti');
+  const converted = leads.filter(l => ['Converti', 'Payé'].includes(l.status));
   const totalEarned = converted.reduce((sum, l) => sum + (l.commissionAmount || 0), 0);
   
   const now = new Date();
@@ -126,7 +126,7 @@ export function calcCommissionStats(leads) {
   });
   const thisMonthEarned = thisMonth.reduce((sum, l) => sum + (l.commissionAmount || 0), 0);
   
-  const pending = leads.filter(l => !['Converti', 'Perdu'].includes(l.status));
+  const pending = leads.filter(l => !['Converti', 'Payé', 'Perdu'].includes(l.status));
   const pendingEstimate = pending.reduce((sum, l) => {
     return sum + ((l.estimatedPremium || 0) * (l.commissionRate || 0) / 100);
   }, 0);
@@ -140,4 +140,23 @@ export function calcCommissionStats(leads) {
       ? Math.round((converted.length / leads.length) * 100)
       : 0,
   };
+}
+
+/**
+ * Calculate per-partner statistics for the Admin Leaderboard
+ */
+export function getPartnerLeaderboard(leads, partners) {
+  if (!partners || partners.length === 0) return [];
+  
+  const partnerStats = partners.filter(p => p.role === 'partner').map(p => {
+    const partnerLeads = leads.filter(l => l.partnerId === p.id);
+    const stats = calcCommissionStats(partnerLeads);
+    return {
+      ...p,
+      stats,
+      leadCount: partnerLeads.length,
+    };
+  });
+
+  return partnerStats.sort((a, b) => b.stats.convertedCount - a.stats.convertedCount);
 }

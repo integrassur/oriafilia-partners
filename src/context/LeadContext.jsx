@@ -4,7 +4,22 @@ import { useAuth } from './AuthContext';
 
 const LeadContext = createContext(null);
 
-// Fonction de mapping pour passer de la base de données (snake_case) au frontend (camelCase)
+// ── Status mapping DB ↔ Frontend ──────────────────────────────
+const DB_TO_FRONTEND_STATUS = {
+  'nouveau':      'Nouveau',
+  'contacte':     'Contacté',
+  'qualifie':     'Qualifié',
+  'devis_envoye': 'Devis envoyé',
+  'gagne':        'Converti',
+  'paye':         'Payé',
+  'perdu':        'Perdu',
+};
+
+const FRONTEND_TO_DB_STATUS = Object.fromEntries(
+  Object.entries(DB_TO_FRONTEND_STATUS).map(([k, v]) => [v, k])
+);
+
+// ── Data mapping helpers ──────────────────────────────────────
 const mapFromDb = (dbLead) => ({
   id: dbLead.id,
   contactName: dbLead.contact_name,
@@ -13,13 +28,14 @@ const mapFromDb = (dbLead) => ({
   productType: dbLead.product_type,
   situation: dbLead.situation,
   source: dbLead.source,
+  estimatedPremium: Number(dbLead.estimated_premium) || 0,
+  commissionRate: Number(dbLead.commission_rate) || 0,
+  commissionAmount: Number(dbLead.commission) || 0,
   partnerId: dbLead.partner_id,
-  status: dbLead.status === 'gagne' ? 'Converti' : 
-          dbLead.status === 'en_cours' ? 'En cours' : 
-          dbLead.status === 'nouveau' ? 'Nouveau' : 'Perdu',
-  commissionAmount: Number(dbLead.commission),
+  status: DB_TO_FRONTEND_STATUS[dbLead.status] || 'Nouveau',
+  notes: dbLead.notes,
   createdAt: dbLead.created_at,
-  notes: dbLead.notes
+  updatedAt: dbLead.updated_at,
 });
 
 const mapToDb = (lead) => {
@@ -30,19 +46,20 @@ const mapToDb = (lead) => {
   if (lead.productType !== undefined) db.product_type = lead.productType;
   if (lead.situation !== undefined) db.situation = lead.situation;
   if (lead.source !== undefined) db.source = lead.source;
-  
-  if (lead.status !== undefined) {
-    db.status = lead.status === 'Converti' ? 'gagne' :
-                lead.status === 'En cours' ? 'en_cours' :
-                lead.status === 'Nouveau' ? 'nouveau' : 'perdu';
-  }
-  
+  if (lead.estimatedPremium !== undefined) db.estimated_premium = lead.estimatedPremium;
+  if (lead.commissionRate !== undefined) db.commission_rate = lead.commissionRate;
   if (lead.commissionAmount !== undefined) db.commission = lead.commissionAmount;
   if (lead.notes !== undefined) db.notes = lead.notes;
-  
+  if (lead.partnerId !== undefined) db.partner_id = lead.partnerId;
+
+  if (lead.status !== undefined) {
+    db.status = FRONTEND_TO_DB_STATUS[lead.status] || 'nouveau';
+  }
+
   return db;
 };
 
+// ── Provider ──────────────────────────────────────────────────
 export function LeadProvider({ children }) {
   const [allLeads, setAllLeads] = useState([]);
   const [adminPartnerFilter, setAdminPartnerFilter] = useState('');
@@ -60,7 +77,6 @@ export function LeadProvider({ children }) {
       // Grâce à RLS sur Supabase :
       // - Si c'est l'admin, ça renverra TOUS les leads.
       // - Si c'est un partenaire, ça ne renverra QUE ses leads.
-      // On a donc plus besoin de filtrer manuellement par rapport au rôle ici.
       const { data, error } = await supabase
         .from('leads')
         .select('*')
@@ -92,7 +108,7 @@ export function LeadProvider({ children }) {
     if (!user) return;
     try {
       const dbLead = mapToDb({ ...leadData, status: 'Nouveau' });
-      dbLead.partner_id = user.id; // Important
+      dbLead.partner_id = user.id;
 
       const { data, error } = await supabase
         .from('leads')
@@ -117,9 +133,7 @@ export function LeadProvider({ children }) {
   const updateLeadStatus = async (leadId, newStatus, commissionAmount = null) => {
     try {
       const updates = {
-        status: newStatus === 'Converti' ? 'gagne' :
-                newStatus === 'En cours' ? 'en_cours' :
-                newStatus === 'Nouveau' ? 'nouveau' : 'perdu'
+        status: FRONTEND_TO_DB_STATUS[newStatus] || 'nouveau',
       };
 
       if (newStatus === 'Converti' && commissionAmount !== null) {
@@ -148,7 +162,6 @@ export function LeadProvider({ children }) {
   const updateLead = async (leadId, updates) => {
     try {
       const dbUpdates = mapToDb(updates);
-      // Supprimer les clés vides non renseignées dans updates s'il y en a
       Object.keys(dbUpdates).forEach(key => dbUpdates[key] === undefined && delete dbUpdates[key]);
 
       const { data, error } = await supabase
