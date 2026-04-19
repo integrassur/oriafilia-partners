@@ -5,7 +5,7 @@ import {
 import { useLeads } from '../context/LeadContext';
 import { formatCurrency } from '../utils/helpers';
 
-export default function CommissionChart() {
+export default function CommissionChart(props) {
   const { leads } = useLeads();
 
   const data = useMemo(() => {
@@ -35,7 +35,7 @@ export default function CommissionChart() {
   }, [leads]);
 
   return (
-    <div className="card animate-fade-in">
+    <div className={`card animate-fade-in ${props.className || 'dashboard-span-6'}`}>
       <div className="card-header">
         <h3>Commissions (6 mois)</h3>
       </div>

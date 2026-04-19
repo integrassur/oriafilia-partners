@@ -137,16 +137,7 @@ export default function AdminLeadsPage() {
     setQuickPartnerId(lead.partnerId);
   };
 
-  const SortHeader = ({ field, children }) => (
-    <th
-      className={sortField === field ? 'sorted' : ''}
-      onClick={() => toggleSort(field)}
-      style={{ cursor: 'pointer' }}
-    >
-      {children}
-      <span className="sort-icon"><ArrowUpDown size={12} /></span>
-    </th>
-  );
+  // SortHeader is now defined outside to fix lint errors
 
   return (
     <div className="page-container animate-fade-in">
@@ -173,7 +164,7 @@ export default function AdminLeadsPage() {
         </div>
       </div>
 
-      <div className="card" style={{ padding: 'var(--space-lg)', overflow: 'hidden' }}>
+      <div className="table-advanced-container">
         {/* Toolbar */}
         <div className="table-toolbar">
           <div className="table-search">
@@ -236,12 +227,12 @@ export default function AdminLeadsPage() {
                   <th style={{ width: '40px' }}>
                     <input type="checkbox" checked={selectedIds.size === filtered.length && filtered.length > 0} onChange={toggleSelectAll} style={{ cursor: 'pointer' }} />
                   </th>
-                  <SortHeader field="contactName">Contact</SortHeader>
+                  <th className={sortField === 'contactName' ? 'sorted' : ''} onClick={() => toggleSort('contactName')} style={{ cursor: 'pointer' }}>Contact <span className="sort-icon"><ArrowUpDown size={12} /></span></th>
                   <th>Partenaire</th>
-                  <SortHeader field="productType">Produit</SortHeader>
-                  <SortHeader field="status">Statut</SortHeader>
-                  <SortHeader field="commissionAmount">Commission</SortHeader>
-                  <SortHeader field="createdAt">Date</SortHeader>
+                  <th className={sortField === 'productType' ? 'sorted' : ''} onClick={() => toggleSort('productType')} style={{ cursor: 'pointer' }}>Produit <span className="sort-icon"><ArrowUpDown size={12} /></span></th>
+                  <th className={sortField === 'status' ? 'sorted' : ''} onClick={() => toggleSort('status')} style={{ cursor: 'pointer' }}>Statut <span className="sort-icon"><ArrowUpDown size={12} /></span></th>
+                  <th className={sortField === 'commissionAmount' ? 'sorted' : ''} onClick={() => toggleSort('commissionAmount')} style={{ cursor: 'pointer' }}>Commission <span className="sort-icon"><ArrowUpDown size={12} /></span></th>
+                  <th className={sortField === 'createdAt' ? 'sorted' : ''} onClick={() => toggleSort('createdAt')} style={{ cursor: 'pointer' }}>Date <span className="sort-icon"><ArrowUpDown size={12} /></span></th>
                   <th style={{ width: '80px', textAlign: 'right' }}>Actions</th>
                 </tr>
               </thead>
@@ -285,22 +276,22 @@ export default function AdminLeadsPage() {
           /* =========================================================
              VUE KANBAN
              ========================================================= */
-          <div style={{ display: 'flex', gap: '16px', overflowX: 'auto', paddingBottom: '16px', minHeight: '600px', alignItems: 'flex-start' }}>
+          <div className="kanban-board">
             {STATUSES.map(status => {
               const columnLeads = filtered.filter(l => l.status === status);
               return (
-                <div key={status} style={{ flex: '0 0 300px', background: 'var(--color-bg)', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px', border: '1px solid var(--color-border)' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--color-border)', paddingBottom: '12px' }}>
+                <div key={status} className="kanban-column">
+                  <div className="kanban-column-header">
                     <div style={{ flex: 1 }}><StatusBadge status={status} /></div>
-                    <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--color-text-muted)', background: 'var(--color-bg-card)', padding: '2px 8px', borderRadius: '12px' }}>{columnLeads.length}</span>
+                    <span className="kanban-column-count">{columnLeads.length}</span>
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div className="kanban-column-body">
                      {columnLeads.map(lead => (
-                       <div key={lead.id} onClick={(e) => openQuickEdit(e, lead)} style={{ background: 'var(--color-bg-card)', padding: '16px', borderRadius: '8px', cursor: 'pointer', border: '1px solid var(--color-border)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)', transition: 'transform 0.1s, box-shadow 0.1s' }} className="hover-lift">
+                       <div key={lead.id} onClick={(e) => openQuickEdit(e, lead)} className="kanban-card">
                           <strong style={{ display: 'block', fontSize: '0.95rem', marginBottom: '4px' }}>{lead.contactName}</strong>
-                          <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '12px' }}>{lead.productType}</div>
+                          <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '8px' }}>{lead.productType}</div>
                           
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px', paddingTop: '12px', borderTop: '1px dashed var(--color-border)' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px', paddingTop: '12px', borderTop: '1px dashed var(--color-border-light)' }}>
                              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', color: 'var(--color-text)' }}>
                                 <Users size={12} /> {getPartnerName(lead.partnerId)}
                              </div>
@@ -323,13 +314,13 @@ export default function AdminLeadsPage() {
       )}
 
       {quickEditLead && (
-        <div className="modal-overlay" onClick={() => setQuickEditLead(null)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '420px' }}>
-            <div className="modal-header">
+        <div className="premium-modal-overlay" onClick={() => setQuickEditLead(null)}>
+          <div className="premium-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '420px' }}>
+            <div className="premium-modal-header">
               <h2 style={{ fontSize: '1.1rem' }}>Édition Rapide : {quickEditLead.contactName}</h2>
               <button className="modal-close" onClick={() => setQuickEditLead(null)}><X size={18} /></button>
             </div>
-            <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div className="premium-modal-body">
               
               <div className="form-group">
                 <label>Réassigner le propriétaire du lead</label>
@@ -354,7 +345,8 @@ export default function AdminLeadsPage() {
                 </div>
               )}
             </div>
-            <div className="form-actions" style={{ justifyContent: 'flex-end', marginTop: '24px' }}>
+            </div>
+            <div className="premium-modal-footer">
               <button className="btn btn-secondary" onClick={() => setQuickEditLead(null)}>Annuler</button>
               <button className="btn btn-primary" onClick={handleQuickEditSave}><CheckCircle size={16} /> Mettre à jour</button>
             </div>
@@ -363,17 +355,18 @@ export default function AdminLeadsPage() {
       )}
 
       {showDeleteConfirm && (
-        <div className="modal-overlay" onClick={() => setShowDeleteConfirm(false)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '400px' }}>
-            <div className="modal-header">
+        <div className="premium-modal-overlay" onClick={() => setShowDeleteConfirm(false)}>
+          <div className="premium-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '400px' }}>
+            <div className="premium-modal-header">
               <h2 style={{ fontSize: '1.1rem' }}>Confirmer la suppression</h2>
               <button className="modal-close" onClick={() => setShowDeleteConfirm(false)}><X size={18} /></button>
             </div>
-            <div style={{ marginTop: '16px', lineHeight: '1.6' }}>
+            <div className="premium-modal-body">
               <p>Supprimer <strong>{selectedIds.size}</strong> lead{(selectedIds.size > 1 ? 's' : '')} ?</p>
               <p style={{ fontSize: '0.875rem', color: '#ef4444', marginTop: '8px' }}>⚠️ Cette action est irréversible.</p>
             </div>
-            <div className="form-actions" style={{ justifyContent: 'flex-end', marginTop: '20px' }}>
+            </div>
+            <div className="premium-modal-footer">
               <button className="btn btn-secondary" onClick={() => setShowDeleteConfirm(false)}>Annuler</button>
               <button className="btn" onClick={handleBulkDelete} style={{ background: '#ef4444', color: '#fff' }}>
                 <Trash2 size={16} /> Supprimer

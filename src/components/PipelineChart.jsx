@@ -14,7 +14,7 @@ const STATUS_COLORS = {
   'Perdu': '#EF4444',
 };
 
-export default function PipelineChart() {
+export default function PipelineChart(props) {
   const { leads } = useLeads();
 
   const data = useMemo(() => {
@@ -26,7 +26,7 @@ export default function PipelineChart() {
   }, [leads]);
 
   return (
-    <div className="card animate-fade-in">
+    <div className={`card animate-fade-in ${props.className || 'dashboard-span-6'}`}>
       <div className="card-header">
         <h3>Pipeline des Leads</h3>
       </div>

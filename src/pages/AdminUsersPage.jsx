@@ -201,14 +201,14 @@ export default function AdminUsersPage() {
 
       {/* Modal - Invitation */}
       {showInviteModal && (
-        <div className="modal-overlay" onClick={resetInviteModal}>
-          <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '480px' }}>
-            <div className="modal-header">
+        <div className="premium-modal-overlay" onClick={resetInviteModal}>
+          <div className="premium-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '480px' }}>
+            <div className="premium-modal-header">
               <h2>Inviter un partenaire</h2>
               <button className="modal-close" onClick={resetInviteModal}><X size={18} /></button>
             </div>
 
-            <div style={{ marginTop: '20px' }}>
+            <div className="premium-modal-body">
               {!inviteLink ? (
                 <>
                   <p style={{ color: 'var(--color-text-muted)', marginBottom: '20px', fontSize: '0.9rem' }}>
@@ -231,7 +231,7 @@ export default function AdminUsersPage() {
                         autoFocus
                       />
                     </div>
-                    <div className="form-actions" style={{ justifyContent: 'flex-end' }}>
+                    <div className="premium-modal-footer">
                       <button type="button" className="btn btn-secondary" onClick={resetInviteModal}>Annuler</button>
                       <button type="submit" className="btn btn-primary" disabled={inviteLoading}>
                         <Link size={16} />
@@ -263,7 +263,7 @@ export default function AdminUsersPage() {
                   <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>
                     Envoyez ce lien au partenaire par email ou message. Il devra créer son mot de passe via ce lien.
                   </p>
-                  <div className="form-actions" style={{ justifyContent: 'flex-end' }}>
+                  <div className="premium-modal-footer">
                     <button className="btn btn-secondary" onClick={resetInviteModal}>Fermer</button>
                     <button className="btn btn-primary" onClick={() => setInviteLink('')}>
                       <Link size={16} />
@@ -279,13 +279,13 @@ export default function AdminUsersPage() {
 
       {/* Modal - Changement de rôle */}
       {roleChangeModal && (
-        <div className="modal-overlay" onClick={() => setRoleChangeModal(null)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '400px' }}>
-            <div className="modal-header">
+        <div className="premium-modal-overlay" onClick={() => setRoleChangeModal(null)}>
+          <div className="premium-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '400px' }}>
+            <div className="premium-modal-header">
               <h2 style={{ fontSize: '1.1rem' }}>Confirmer le changement de rôle</h2>
               <button className="modal-close" onClick={() => setRoleChangeModal(null)}><X size={18} /></button>
             </div>
-            <div style={{ marginTop: '16px', lineHeight: '1.6' }}>
+            <div className="premium-modal-body" style={{ lineHeight: '1.6' }}>
               Changer le rôle de <strong>{roleChangeModal.partnerName}</strong> :
               <div style={{ margin: '12px 0', padding: '12px', backgroundColor: 'var(--color-bg)', borderRadius: '8px' }}>
                 <strong>{roleChangeModal.currentRole}</strong> → <strong style={{ color: roleChangeModal.newRole === 'admin' ? 'var(--color-green)' : 'currentColor' }}>{roleChangeModal.newRole}</strong>
@@ -296,7 +296,7 @@ export default function AdminUsersPage() {
                 </p>
               )}
             </div>
-            <div className="form-actions" style={{ justifyContent: 'flex-end', marginTop: '20px' }}>
+            <div className="premium-modal-footer">
               <button className="btn btn-secondary" onClick={() => setRoleChangeModal(null)}>Annuler</button>
               <button className="btn btn-primary" onClick={confirmRoleChange}>Confirmer</button>
             </div>
@@ -306,14 +306,14 @@ export default function AdminUsersPage() {
 
       {/* Modal - Détails Partenaire */}
       {selectedPartner && (
-        <div className="modal-overlay" onClick={() => setSelectedPartner(null)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '540px' }}>
-            <div className="modal-header">
+        <div className="premium-modal-overlay" onClick={() => setSelectedPartner(null)}>
+          <div className="premium-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '540px' }}>
+            <div className="premium-modal-header">
               <h2 style={{ fontSize: '1.25rem' }}>Profil complet du partenaire</h2>
               <button className="modal-close" onClick={() => setSelectedPartner(null)}><X size={18} /></button>
             </div>
             
-            <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div className="premium-modal-body" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', borderBottom: '1px solid var(--color-border)', paddingBottom: '20px' }}>
                   <div style={{
                     width: '56px', height: '56px', borderRadius: '50%',
@@ -388,12 +388,12 @@ export default function AdminUsersPage() {
                  {/* Master Control Section */}
                  {selectedPartner.role !== 'admin' && (
                    <div style={{ gridColumn: '1 / -1', marginTop: '16px', borderTop: '1px solid var(--color-border)', paddingTop: '24px' }}>
-                     <h4 style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', color: '#ef4444' }}>
+                     <h4 className="danger-zone-header">
                         <Shield size={18} /> Actions Administratives (Master Control)
                      </h4>
                      
-                     <div style={{ padding: '20px', background: 'rgba(239, 68, 68, 0.05)', borderRadius: '12px', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
-                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid rgba(239, 68, 68, 0.1)' }}>
+                     <div className="danger-zone">
+                       <div className="danger-action-row">
                          <div>
                            <strong style={{ display: 'block', marginBottom: '4px' }}>Statut du compte</strong>
                            <span style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>Suspendre l'accès bloquera la connexion du courtier.</span>
@@ -408,7 +408,7 @@ export default function AdminUsersPage() {
                          </button>
                        </div>
 
-                       <div>
+                       <div className="danger-action-row" style={{ display: 'block' }}>
                          <strong style={{ display: 'block', marginBottom: '12px' }}>Forcer un nouveau mot de passe</strong>
                          <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '12px' }}>
                            Définissez manuellement un mot de passe temporaire à communiquer personnellement au partenaire.
@@ -445,15 +445,14 @@ export default function AdminUsersPage() {
                              </div>
                            )}
                          </div>
-                       </div>
                      </div>
                    </div>
                  )}
                </div>
 
-               <div className="form-actions" style={{ justifyContent: 'flex-end', marginTop: '16px' }}>
-                 <button className="btn btn-secondary" onClick={() => { setSelectedPartner(null); setNewPassword(''); setResetPasswordStatus(''); }}>Fermer</button>
-               </div>
+            </div>
+            <div className="premium-modal-footer">
+              <button className="btn btn-secondary" onClick={() => { setSelectedPartner(null); setNewPassword(''); setResetPasswordStatus(''); }}>Fermer</button>
             </div>
           </div>
         </div>

@@ -84,17 +84,17 @@ function AdminCommissionsView({ leads, partners, updateLeadStatus }) {
         </div>
       </div>
 
-      <div className="commission-summary" style={{ marginBottom: '24px' }}>
-        <div className="card" style={{ padding: '24px', display: 'flex', alignItems: 'center', gap: '16px', borderLeft: '4px solid #ef4444' }}>
-           <div style={{ padding: '16px', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '12px', color: '#ef4444' }}><Clock size={32} /></div>
+      <div className="dashboard-grid" style={{ marginBottom: 'var(--space-xl)' }}>
+        <div className="card dashboard-span-6" style={{ padding: 'var(--space-xl)', display: 'flex', alignItems: 'center', gap: 'var(--space-md)', borderLeft: '4px solid #ef4444' }}>
+           <div style={{ padding: 'var(--space-md)', background: 'rgba(239, 68, 68, 0.1)', borderRadius: 'var(--radius-lg)', color: '#ef4444' }}><Clock size={32} /></div>
            <div>
              <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', fontWeight: 600, textTransform: 'uppercase' }}>Commissions en attente de paiement</div>
              <div style={{ fontSize: '1.75rem', fontWeight: 700, color: 'var(--color-text)' }}>{formatCurrency(totalUnpaid)}</div>
            </div>
         </div>
 
-        <div className="card" style={{ padding: '24px', display: 'flex', alignItems: 'center', gap: '16px', borderLeft: '4px solid var(--color-green)' }}>
-           <div style={{ padding: '16px', background: 'var(--color-green-bg)', borderRadius: '12px', color: 'var(--color-green)' }}><CheckCircle size={32} /></div>
+        <div className="card dashboard-span-6" style={{ padding: 'var(--space-xl)', display: 'flex', alignItems: 'center', gap: 'var(--space-md)', borderLeft: '4px solid var(--color-green)' }}>
+           <div style={{ padding: 'var(--space-md)', background: 'var(--color-green-bg)', borderRadius: 'var(--radius-lg)', color: 'var(--color-green)' }}><CheckCircle size={32} /></div>
            <div>
              <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', fontWeight: 600, textTransform: 'uppercase' }}>Total Historique Payé</div>
              <div style={{ fontSize: '1.75rem', fontWeight: 700, color: 'var(--color-text)' }}>{formatCurrency(totalPaid)}</div>
@@ -102,7 +102,7 @@ function AdminCommissionsView({ leads, partners, updateLeadStatus }) {
         </div>
       </div>
 
-      <div className="card" style={{ padding: 'var(--space-lg)' }}>
+      <div className="table-advanced-container">
         <div className="table-toolbar">
           <div className="table-search">
             <Search size={16} />

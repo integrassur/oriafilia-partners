@@ -40,7 +40,7 @@ function PartnerDashboardView({ leads, user, navigate }) {
         <CommissionChart />
       </div>
 
-      <div className="card animate-fade-in">
+      <div className="card dashboard-span-12 animate-fade-in">
         <div className="card-header">
           <h3>Activité récente</h3>
           <button className="btn btn-outline btn-sm" onClick={() => navigate('/leads')}>Voir tout</button>
@@ -73,7 +73,6 @@ function AdminDashboardView({ leads, partners, navigate }) {
   const stats = useMemo(() => calcCommissionStats(leads), [leads]);
   const leaderboard = useMemo(() => getPartnerLeaderboard(leads, partners), [leads, partners]);
   const activePartners = partners?.filter(p => p.role === 'partner' && p.status !== 'inactive').length || 0;
-  const inactivePartners = partners?.filter(p => p.role === 'partner' && p.status === 'inactive').length || 0;
 
   return (
     <>
@@ -99,7 +98,7 @@ function AdminDashboardView({ leads, partners, navigate }) {
 
       <div className="dashboard-grid">
         {/* Section Leaderboard */}
-        <div className="card animate-fade-in" style={{ animationDelay: '200ms' }}>
+        <div className="card dashboard-span-6 animate-fade-in" style={{ animationDelay: '200ms' }}>
           <div className="card-header" style={{ borderBottom: '1px solid var(--color-border)', paddingBottom: '16px' }}>
             <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Trophy size={20} color="#F59E0B" /> Top 5 Partenaires</h3>
           </div>
@@ -134,7 +133,7 @@ function AdminDashboardView({ leads, partners, navigate }) {
         </div>
 
         {/* Inactive & Alertes */}
-        <div className="card animate-fade-in" style={{ animationDelay: '300ms' }}>
+        <div className="card dashboard-span-6 animate-fade-in" style={{ animationDelay: '300ms' }}>
           <div className="card-header" style={{ borderBottom: '1px solid var(--color-border)', paddingBottom: '16px' }}>
              <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><AlertTriangle size={20} color="#ef4444" /> Partenaires Inactifs (0 Lead)</h3>
           </div>
