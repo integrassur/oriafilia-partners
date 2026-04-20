@@ -14,10 +14,7 @@ export default function AdminUsersPage() {
   const [resetPasswordStatus, setResetPasswordStatus] = useState('');
   const [isTogglingStatus, setIsTogglingStatus] = useState(false);
 
-  const isProfileComplete = (p) => {
-    if (p.role === 'admin') return true;
-    return !!(p.full_name);
-  };
+
 
   const handleToggleStatus = async () => {
     if (!selectedPartner) return;
@@ -150,11 +147,7 @@ export default function AdminUsersPage() {
                   <div>
                     <div style={{ fontWeight: 500, display: 'flex', alignItems: 'center', gap: '8px' }}>
                       {p.name || '—'}
-                      {!isProfileComplete(p) && (
-                        <span title="Profil incomplet (informations réglementaires manquantes)" style={{ color: '#f59e0b', display: 'flex' }}>
-                          <AlertCircle size={14} />
-                        </span>
-                      )}
+
                     </div>
                   </div>
                 </td>
@@ -332,11 +325,7 @@ export default function AdminUsersPage() {
                       <Mail size={14} /> {selectedPartner.email}
                     </div>
                   </div>
-                  {!isProfileComplete(selectedPartner) && (
-                    <span className="status-badge perdu" style={{ background: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b', border: '1px solid rgba(245, 158, 11, 0.2)' }}>
-                      Incomplet
-                    </span>
-                  )}
+
                </div>
 
                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
