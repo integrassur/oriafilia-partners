@@ -344,7 +344,6 @@ export default function AdminLeadsPage() {
                 </div>
               )}
             </div>
-            </div>
             <div className="premium-modal-footer">
               <button className="btn btn-secondary" onClick={() => setQuickEditLead(null)}>Annuler</button>
               <button className="btn btn-primary" onClick={handleQuickEditSave}><CheckCircle size={16} /> Mettre à jour</button>
@@ -363,7 +362,6 @@ export default function AdminLeadsPage() {
             <div className="premium-modal-body">
               <p>Supprimer <strong>{selectedIds.size}</strong> lead{(selectedIds.size > 1 ? 's' : '')} ?</p>
               <p style={{ fontSize: '0.875rem', color: '#ef4444', marginTop: '8px' }}>⚠️ Cette action est irréversible.</p>
-            </div>
             </div>
             <div className="premium-modal-footer">
               <button className="btn btn-secondary" onClick={() => setShowDeleteConfirm(false)}>Annuler</button>

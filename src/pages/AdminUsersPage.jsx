@@ -444,9 +444,10 @@ export default function AdminUsersPage() {
                                {resetPasswordStatus}
                              </div>
                            )}
-                         </div>
+                        </div>
                      </div>
                    </div>
+                 </div>
                  )}
                </div>
 
