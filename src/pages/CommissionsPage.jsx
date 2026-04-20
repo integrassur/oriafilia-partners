@@ -190,7 +190,7 @@ function PartnerCommissionsView({ leads, stats }) {
       <div className="dashboard-grid">
         <CommissionChart />
 
-        <div className="card animate-fade-in">
+        <div className="card animate-fade-in dashboard-span-6">
           <div className="card-header">
             <h3>Historique direct ({convertedLeads.length})</h3>
           </div>

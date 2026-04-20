@@ -48,7 +48,7 @@ export default function CommissionChart(props) {
                 <stop offset="100%" stopColor="#10C27E" stopOpacity={0.02} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
             <XAxis
               dataKey="label"
               axisLine={false}
@@ -65,11 +65,12 @@ export default function CommissionChart(props) {
             />
             <Tooltip
               contentStyle={{
-                background: '#fff',
-                border: '1px solid #E2E8F0',
+                background: 'var(--color-surface)',
+                border: '1px solid var(--color-border)',
                 borderRadius: '10px',
                 fontSize: '13px',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                color: 'var(--color-text)',
               }}
               formatter={(value) => [formatCurrency(value), 'Commission']}
               cursor={{ stroke: '#10C27E', strokeWidth: 1, strokeDasharray: '4 4' }}
