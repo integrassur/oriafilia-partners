@@ -352,14 +352,7 @@ export default function AdminUsersPage() {
                  
                  
                  
-                 <div>
-                   <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', marginBottom: '6px', fontWeight: 600, letterSpacing: '0.05em' }}>N° SIRET</div>
-                   <div style={{ fontSize: '0.95rem', fontFamily: 'monospace' }}>{selectedPartner.siret || <em className="text-muted" style={{ fontFamily: 'var(--font-sans)' }}>Non renseigné</em>}</div>
-                 </div>
-                 <div>
-                   <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', marginBottom: '6px', fontWeight: 600, letterSpacing: '0.05em' }}>N° ORIAS</div>
-                   <div style={{ fontSize: '0.95rem', fontFamily: 'monospace' }}>{selectedPartner.orias || <em className="text-muted" style={{ fontFamily: 'var(--font-sans)' }}>Non renseigné</em>}</div>
-                 </div>
+
                  
                  
 
