@@ -1,0 +1,11 @@
+Contact,Email,Téléphone,Produit,Situation,Source,Prime estimée,Commission (%),Notes
+"Jean Dupont","j.dupont@email.com","+33 6 12 34 56 78","Auto","Résilié non-paiement","CSV Import",1200,10,"Intéressé par une formule tous risques."
+"Marie Leblanc","m.leblanc@email.com","+33 6 98 76 54 32","Habitation","Nouveau propriétaire","CSV Import",800,8,"Appartement 3 pièces à Lyon."
+"Pierre Martin","p.martin@email.com","+33 7 11 22 33 44","Auto","Jeune conducteur","CSV Import",1800,10,"Premier véhicule."
+"Sophie Bernard","sophie.b@email.com","+33 6 55 44 33 22","Santé","Travailleur indépendant","CSV Import",2400,12,"TNS, besoin couverture complète optique/dentaire."
+"Lucas Moreau","lucas.m@email.com","+33 7 22 33 44 55","Moto","Malus élevé","CSV Import",950,10,"Honda CB650R. Cherche tarif compétitif."
+"Isabelle Petit","isabelle.p@email.com","+33 6 77 88 99 00","RC Pro","Création entreprise","CSV Import",3200,15,"Boutique e-commerce."
+"Thomas Roux","thomas.roux@email.com","+33 7 66 55 44 33","Auto","Résilié sinistre","CSV Import",2100,10,"Trouvé moins cher ailleurs ?"
+"Emma Laurent","emma.l@email.com","+33 6 11 22 33 44","Prévoyance","Salarié cadre","CSV Import",1500,12,"Prévoyance décès/invalidité."
+"Hugo Garcia","hugo.g@email.com","+33 7 99 88 77 66","Habitation","Locataire","CSV Import",350,8,"Studio étudiant Paris."
+"Antoine Duval","antoine.d@email.com","+33 6 44 55 66 77","Santé","Famille","CSV Import",3600,12,"Couple + 2 enfants. Couverture hospitalisation."

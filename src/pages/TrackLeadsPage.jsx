@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import LeadTable from '../components/LeadTable';
 import LeadDetailModal from '../components/LeadDetailModal';
+import CsvImportBtn from '../components/CsvImportBtn';
 
 export default function TrackLeadsPage() {
   const [selectedLead, setSelectedLead] = useState(null);
@@ -11,6 +12,9 @@ export default function TrackLeadsPage() {
         <div>
           <h1>Suivi des Leads</h1>
           <p>Recherchez, filtrez et suivez l'avancement de vos leads</p>
+        </div>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <CsvImportBtn className="btn btn-primary" />
         </div>
       </div>
 

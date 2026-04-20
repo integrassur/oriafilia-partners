@@ -6,6 +6,7 @@ import { STATUSES, PRODUCT_TYPES } from '../utils/seedData';
 import { formatDate, formatCurrency, exportToCSV } from '../utils/helpers';
 import StatusBadge from '../components/StatusBadge';
 import LeadDetailModal from '../components/LeadDetailModal';
+import CsvImportBtn from '../components/CsvImportBtn';
 
 export default function AdminLeadsPage() {
   const { leads, adminPartnerFilter, setAdminPartnerFilter, deleteLead, updateLeadStatus, updateLead } = useLeads();
@@ -136,8 +137,6 @@ export default function AdminLeadsPage() {
     setQuickCommission(lead.commissionAmount?.toString() || '');
     setQuickPartnerId(lead.partnerId);
   };
-
-  // SortHeader is now defined outside to fix lint errors
 
   return (
     <div className="page-container animate-fade-in">
