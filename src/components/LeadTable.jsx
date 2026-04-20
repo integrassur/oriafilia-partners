@@ -61,13 +61,14 @@ export default function LeadTable({ onSelectLead }) {
     return result;
   }, [leads, search, statusFilter, productFilter, sortField, sortDir]);
 
-  const SortHeader = ({ field, children }) => (
+  const renderSortHeader = (field, label) => (
     <th
       className={sortField === field ? 'sorted' : ''}
       onClick={() => toggleSort(field)}
+      style={{ cursor: 'pointer' }}
     >
-      {children}
-      <span className="sort-icon">
+      {label}
+      <span className="sort-icon" style={{ marginLeft: '4px', opacity: sortField === field ? 1 : 0.5 }}>
         <ArrowUpDown size={12} />
       </span>
     </th>
@@ -148,12 +149,12 @@ export default function LeadTable({ onSelectLead }) {
           <table className="data-table" id="leads-table">
             <thead>
               <tr>
-                <SortHeader field="contactName">Contact</SortHeader>
-                <SortHeader field="productType">Produit</SortHeader>
-                <SortHeader field="source">Source</SortHeader>
-                <SortHeader field="status">Statut</SortHeader>
-                <SortHeader field="commissionAmount">Commission</SortHeader>
-                <SortHeader field="createdAt">Date</SortHeader>
+                {renderSortHeader('contactName', 'Contact')}
+                {renderSortHeader('productType', 'Produit')}
+                {renderSortHeader('source', 'Source')}
+                {renderSortHeader('status', 'Statut')}
+                {renderSortHeader('commissionAmount', 'Commission')}
+                {renderSortHeader('createdAt', 'Date')}
               </tr>
             </thead>
             <tbody>

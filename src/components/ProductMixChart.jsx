@@ -7,6 +7,26 @@ import { formatCurrency } from '../utils/helpers';
 
 const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#6366f1', '#EC4899', '#8B5CF6', '#14b8a6', '#f43f5e'];
 
+const CustomTooltip = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', padding: '10px 14px', borderRadius: '10px', fontSize: '13px', boxShadow: '0 4px 12px rgba(0,0,0,0.3)', color: 'var(--color-text)' }}>
+        <strong style={{ display: 'block', marginBottom: '8px' }}>{data.name}</strong>
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', marginBottom: '4px' }}>
+           <span style={{ color: 'var(--color-text-muted)' }}>Volume:</span> 
+           <strong>{data.volume}</strong>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px' }}>
+           <span style={{ color: 'var(--color-text-muted)' }}>Valeur potentielle:</span> 
+           <strong style={{ color: 'var(--color-green)' }}>{formatCurrency(data.value)}</strong>
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
+
 export default function ProductMixChart(props) {
   const { leads: ctxLeads } = useLeads();
   const leads = props.leads || ctxLeads;
@@ -28,25 +48,7 @@ export default function ProductMixChart(props) {
     return Object.values(productMap).sort((a, b) => b[metric] - a[metric]);
   }, [leads, metric]);
 
-  const CustomTooltip = ({ active, payload }) => {
-    if (active && payload && payload.length) {
-      const data = payload[0].payload;
-      return (
-        <div style={{ background: '#fff', border: '1px solid #E2E8F0', padding: '10px 14px', borderRadius: '10px', fontSize: '13px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
-          <strong style={{ display: 'block', marginBottom: '8px' }}>{data.name}</strong>
-          <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', marginBottom: '4px' }}>
-             <span style={{ color: 'var(--color-text-muted)' }}>Volume:</span> 
-             <strong>{data.volume}</strong>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px' }}>
-             <span style={{ color: 'var(--color-text-muted)' }}>Valeur potentielle:</span> 
-             <strong style={{ color: 'var(--color-green)' }}>{formatCurrency(data.value)}</strong>
-          </div>
-        </div>
-      );
-    }
-    return null;
-  };
+
 
   return (
     <div className={`card animate-fade-in ${props.className || 'dashboard-span-4'}`}>

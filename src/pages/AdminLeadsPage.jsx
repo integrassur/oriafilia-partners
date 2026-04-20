@@ -28,14 +28,7 @@ export default function AdminLeadsPage() {
   const [quickCommission, setQuickCommission] = useState('');
   const [quickPartnerId, setQuickPartnerId] = useState('');
 
-  if (user?.role !== 'admin') {
-    return (
-      <div style={{ padding: '60px', textAlign: 'center', color: 'var(--color-text-muted)' }}>
-        <h2>Accès refusé</h2>
-        <p>Cette page est réservée aux administrateurs.</p>
-      </div>
-    );
-  }
+
 
   const getPartnerName = (partnerId) => {
     const p = partners?.find(pt => pt.id === partnerId);
@@ -137,6 +130,15 @@ export default function AdminLeadsPage() {
     setQuickCommission(lead.commissionAmount?.toString() || '');
     setQuickPartnerId(lead.partnerId);
   };
+
+  if (user?.role !== 'admin') {
+    return (
+      <div style={{ padding: '60px', textAlign: 'center', color: 'var(--color-text-muted)' }}>
+        <h2>Accès refusé</h2>
+        <p>Cette page est réservée aux administrateurs.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="page-container animate-fade-in">

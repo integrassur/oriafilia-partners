@@ -9,7 +9,6 @@ export default function AdminUsersPage() {
   const { user, partners, updateUserRole, togglePartnerStatus, resetPartnerPassword } = useAuth();
   const [roleChangeModal, setRoleChangeModal] = useState(null);
   const [selectedPartner, setSelectedPartner] = useState(null);
-  const [statusFilter, setStatusFilter] = useState('all');
   const [newPassword, setNewPassword] = useState('');
   const [resetPasswordStatus, setResetPasswordStatus] = useState('');
   const [isTogglingStatus, setIsTogglingStatus] = useState(false);

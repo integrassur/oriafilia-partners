@@ -3,7 +3,7 @@ import Papa from 'papaparse';
 import { useLeads } from '../context/LeadContext';
 import { UploadCloud, CheckCircle, FileText, AlertCircle, Download, Infinity as InfinityIcon } from 'lucide-react';
 
-export default function CsvImportBtn({ className }) {
+export default function CsvImportBtn() {
   const { addLead } = useLeads();
   const fileInputRef = useRef(null);
   const [loading, setLoading] = useState(false);

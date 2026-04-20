@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
   PlusCircle,
@@ -19,7 +19,6 @@ const navItems = [
 ];
 
 export default function Sidebar() {
-  const location = useLocation();
   const { user } = useAuth();
 
   return (
@@ -30,6 +29,7 @@ export default function Sidebar() {
 
       <nav className="sidebar-nav">
         <span className="sidebar-section-label">Menu Principal</span>
+        {/* eslint-disable-next-line no-unused-vars */}
         {navItems.map(({ to, icon: Icon, label }) => (
           <NavLink
             key={to}

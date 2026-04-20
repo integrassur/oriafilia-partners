@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '../config/supabaseClient';
 
 const AuthContext = createContext(null);
@@ -30,6 +31,7 @@ export function AuthProvider({ children }) {
     });
 
     return () => subscription.unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchUserProfile = async (authUser) => {
@@ -84,7 +86,7 @@ export function AuthProvider({ children }) {
   const login = async (email, password) => {
     setError('');
     setLoading(true);
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -103,7 +105,7 @@ export function AuthProvider({ children }) {
 
   // Ajout par l'admin via Supabase Auth
   const addPartner = async (name, email, password) => {
-    const { data, error } = await supabase.auth.signUp({
+    const { error, data } = await supabase.auth.signUp({
       email,
       password,
     });

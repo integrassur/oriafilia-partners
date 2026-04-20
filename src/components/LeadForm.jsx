@@ -1,7 +1,18 @@
 import { useState } from 'react';
 import { useLeads } from '../context/LeadContext';
 import { PRODUCT_TYPES, SOURCES } from '../utils/seedData';
-import { CheckCircle, User, Mail, Phone, Briefcase, Tag, FileText, Send } from 'lucide-react';
+import { CheckCircle, User, Mail, Phone, Briefcase, Tag, FileText, Send, Hash } from 'lucide-react';
+
+const InputWrapper = ({ icon: Icon, error, children }) => (
+  <div style={{ position: 'relative' }}>
+    <div style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: error ? '#ef4444' : 'var(--color-text-muted)', pointerEvents: 'none', display: 'flex' }}>
+        {Icon && <Icon size={18} />}
+    </div>
+    <div className="input-with-icon">
+        {children}
+    </div>
+  </div>
+);
 
 const DEFAULT_RATES = {
   'Auto': 10,
@@ -73,7 +84,7 @@ export default function LeadForm() {
         notes: form.notes.trim(),
       });
       setSubmitted(true);
-    } catch (err) {
+    } catch {
       alert("Une erreur est survenue lors de l'envoi. Veuillez réessayer.");
     }
   };
@@ -95,16 +106,6 @@ export default function LeadForm() {
     );
   }
 
-  const InputWrapper = ({ icon: Icon, error, children }) => (
-      <div style={{ position: 'relative' }}>
-        <div style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: error ? '#ef4444' : 'var(--color-text-muted)', pointerEvents: 'none', display: 'flex' }}>
-            <Icon size={18} />
-        </div>
-        <div className="input-with-icon">
-            {children}
-        </div>
-      </div>
-  );
 
   return (
     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>

@@ -1,6 +1,7 @@
 import { TrendingUp, TrendingDown } from 'lucide-react';
 
-export default function KPICard({ icon: Icon, label, value, trend, trendLabel, accentColor, bgColor, delay = 0 }) {
+// eslint-disable-next-line no-unused-vars
+export default function KPICard({ icon: Icon, label, value, trend, accentColor, bgColor, delay = 0 }) {
   const style = {
     '--kpi-accent': accentColor || 'var(--color-green)',
     '--kpi-bg': bgColor || 'var(--color-green-bg)',
