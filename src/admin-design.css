@@ -36,19 +36,19 @@
 
 /* --- Glassmorphism & Cards --- */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(30, 41, 59, 0.7);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 8px 32px 0 rgba(0, 51, 88, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
   border-radius: var(--radius-xl);
   padding: var(--space-xl);
   transition: all var(--transition-base);
 }
 
 .glass-panel:hover {
-  background: rgba(255, 255, 255, 0.85);
-  box-shadow: 0 8px 32px 0 rgba(0, 51, 88, 0.08);
+  background: rgba(30, 41, 59, 0.85);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
 
 /* --- Master Control (Danger Zone) --- */
@@ -104,7 +104,7 @@
   width: 100%;
   max-width: 600px;
   max-height: 90vh;
-  box-shadow: 0 24px 48px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.1);
+  box-shadow: 0 24px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -247,7 +247,7 @@
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-green) 100%);
+  background: linear-gradient(135deg, #38bdf8 0%, var(--color-green) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

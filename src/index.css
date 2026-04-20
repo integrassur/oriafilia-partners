@@ -5,23 +5,23 @@
 /* --- CSS Custom Properties (Brand Tokens) --- */
 :root {
   /* Brand Colors */
-  --color-navy: #003358;
-  --color-navy-light: #133863;
-  --color-navy-dark: #00243e;
+  --color-navy: #f8fafc;
+  --color-navy-light: #0ea5e9;
+  --color-navy-dark: #0f172a;
   --color-green: #10C27E;
   --color-green-light: #2ECC71;
   --color-green-dark: #0da86c;
-  --color-green-bg: rgba(16, 194, 126, 0.1);
+  --color-green-bg: rgba(16, 194, 126, 0.15);
   
-  /* Neutrals */
-  --color-bg: #F4F6F9;
-  --color-surface: #FFFFFF;
-  --color-surface-hover: #F8F9FA;
-  --color-border: #E2E8F0;
-  --color-border-light: #EDF2F7;
-  --color-text: #1A202C;
-  --color-text-secondary: #64748B;
-  --color-text-muted: #94A3B8;
+  /* Neutrals - DARK MODE */
+  --color-bg: #0f172a;
+  --color-surface: #1e293b;
+  --color-surface-hover: #334155;
+  --color-border: #334155;
+  --color-border-light: rgba(255, 255, 255, 0.05);
+  --color-text: #f8fafc;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
   
   /* Status Colors */
   --color-nouveau: #3B82F6;
@@ -31,13 +31,13 @@
   --color-converti: #10B981;
   --color-perdu: #EF4444;
   
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-  --shadow-card: 0 1px 3px rgba(0, 51, 88, 0.06), 0 1px 2px rgba(0, 51, 88, 0.04);
-  --shadow-card-hover: 0 10px 25px rgba(0, 51, 88, 0.1), 0 4px 10px rgba(0, 51, 88, 0.06);
+  /* Shadows - Premium Glow for Dark Mode */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.7), 0 8px 10px -6px rgba(0, 0, 0, 0.7);
+  --shadow-card: 0 4px 6px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  --shadow-card-hover: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(16, 194, 126, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   
   /* Spacing */
   --space-xs: 4px;
@@ -97,7 +97,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   font-weight: 700;
   line-height: 1.3;
-  color: var(--color-navy);
+  color: var(--color-text);
 }
 
 h1 { font-size: 1.75rem; }
@@ -202,7 +202,7 @@ img { max-width: 100%; height: auto; }
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--color-navy-dark) 0%, var(--color-navy) 40%, var(--color-navy-light) 100%);
+  background: var(--color-bg);
   position: relative;
   overflow: hidden;
 }
@@ -231,6 +231,7 @@ img { max-width: 100%; height: auto; }
 
 .login-card {
   background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   padding: var(--space-2xl) var(--space-xl);
   width: 100%;
@@ -277,7 +278,7 @@ img { max-width: 100%; height: auto; }
 .form-group label {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: var(--color-navy);
+  color: var(--color-text-secondary);
 }
 
 .form-input {
@@ -286,7 +287,7 @@ img { max-width: 100%; height: auto; }
   border-radius: var(--radius-md);
   font-size: 0.875rem;
   color: var(--color-text);
-  background: var(--color-surface);
+  background: rgba(0, 0, 0, 0.2);
   transition: all var(--transition-fast);
   outline: none;
 }
@@ -311,7 +312,7 @@ img { max-width: 100%; height: auto; }
   border-radius: var(--radius-md);
   font-size: 0.875rem;
   color: var(--color-text);
-  background: var(--color-surface);
+  background: rgba(0, 0, 0, 0.2);
   transition: all var(--transition-fast);
   outline: none;
   appearance: none;
@@ -332,7 +333,7 @@ img { max-width: 100%; height: auto; }
   border-radius: var(--radius-md);
   font-size: 0.875rem;
   color: var(--color-text);
-  background: var(--color-surface);
+  background: rgba(0, 0, 0, 0.2);
   transition: all var(--transition-fast);
   outline: none;
   resize: vertical;
@@ -382,8 +383,8 @@ img { max-width: 100%; height: auto; }
 }
 
 .btn-secondary {
-  background: var(--color-surface);
-  color: var(--color-navy);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-text);
   border: 1.5px solid var(--color-border);
 }
 
@@ -450,7 +451,7 @@ img { max-width: 100%; height: auto; }
   background: var(--color-bg);
   padding: 2px 8px;
   border-radius: var(--radius-sm);
-  color: var(--color-navy);
+  color: var(--color-text);
 }
 
 /* ============================================
@@ -464,7 +465,8 @@ img { max-width: 100%; height: auto; }
 /* --- Sidebar --- */
 .sidebar {
   width: var(--sidebar-width);
-  background: linear-gradient(180deg, var(--color-navy-dark) 0%, var(--color-navy) 100%);
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
   color: white;
   display: flex;
   flex-direction: column;
@@ -489,7 +491,7 @@ img { max-width: 100%; height: auto; }
 .sidebar-logo {
   height: 36px;
   width: auto;
-  filter: brightness(0) invert(1);
+  filter: none;
 }
 
 .sidebar-nav {
@@ -629,7 +631,7 @@ img { max-width: 100%; height: auto; }
 .header-user-name {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: var(--color-navy);
+  color: var(--color-text);
 }
 
 .header-logout {
@@ -761,7 +763,7 @@ img { max-width: 100%; height: auto; }
   font-size: 1.75rem;
   font-weight: 800;
   font-family: var(--font-heading);
-  color: var(--color-navy);
+  color: var(--color-text);
   line-height: 1;
   margin-bottom: 4px;
   animation: countUp 0.5s ease forwards;
