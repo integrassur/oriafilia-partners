@@ -15,7 +15,8 @@ const STATUS_COLORS = {
 };
 
 export default function PipelineChart(props) {
-  const { leads } = useLeads();
+  const { leads: ctxLeads } = useLeads();
+  const leads = props.leads || ctxLeads;
 
   const data = useMemo(() => {
     return STATUSES.map(status => ({

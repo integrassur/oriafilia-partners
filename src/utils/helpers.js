@@ -131,6 +131,15 @@ export function calcCommissionStats(leads) {
     return sum + ((l.estimatedPremium || 0) * (l.commissionRate || 0) / 100);
   }, 0);
 
+  const conversionTimes = converted
+    .map(l => new Date(l.updatedAt) - new Date(l.createdAt))
+    .filter(t => t > 0);
+  const avgConversionTimeDays = conversionTimes.length > 0
+    ? Math.round(conversionTimes.reduce((sum, t) => sum + t, 0) / conversionTimes.length / 86400000)
+    : 0;
+
+  const averageCart = converted.length > 0 ? totalEarned / converted.length : 0;
+
   return {
     totalEarned,
     thisMonthEarned,
@@ -139,6 +148,8 @@ export function calcCommissionStats(leads) {
     conversionRate: leads.length > 0
       ? Math.round((converted.length / leads.length) * 100)
       : 0,
+    avgConversionTimeDays,
+    averageCart,
   };
 }
 

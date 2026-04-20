@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Users, Clock, CheckCircle, Wallet, PlusCircle, Trophy, AlertTriangle } from 'lucide-react';
 import { useLeads } from '../context/LeadContext';
@@ -7,6 +7,7 @@ import { formatCurrency, calcCommissionStats, timeAgo, getPartnerLeaderboard } f
 import KPICard from '../components/KPICard';
 import PipelineChart from '../components/PipelineChart';
 import CommissionChart from '../components/CommissionChart';
+import ProductMixChart from '../components/ProductMixChart';
 import StatusBadge from '../components/StatusBadge';
 
 // --- Partner Dashboard View ---
@@ -69,7 +70,24 @@ function PartnerDashboardView({ leads, user, navigate }) {
 }
 
 // --- Admin Cockpit View ---
-function AdminDashboardView({ leads, partners, navigate }) {
+function AdminDashboardView({ leads: allLeads, partners, navigate }) {
+  const [timeRange, setTimeRange] = useState('all');
+
+  const leads = useMemo(() => {
+    if (timeRange === 'all') return allLeads;
+    const now = new Date();
+    const cutoff = new Date();
+    if (timeRange === 'month') {
+      cutoff.setMonth(now.getMonth() - 1);
+    } else if (timeRange === 'quarter') {
+      cutoff.setMonth(now.getMonth() - 3);
+    } else if (timeRange === 'ytd') {
+      cutoff.setMonth(0);
+      cutoff.setDate(1);
+    }
+    return allLeads.filter(l => new Date(l.createdAt) >= cutoff);
+  }, [allLeads, timeRange]);
+
   const stats = useMemo(() => calcCommissionStats(leads), [leads]);
   const leaderboard = useMemo(() => getPartnerLeaderboard(leads, partners), [leads, partners]);
   const activePartners = partners?.filter(p => p.role === 'partner' && p.status !== 'inactive').length || 0;
@@ -83,9 +101,20 @@ function AdminDashboardView({ leads, partners, navigate }) {
           </h1>
           <p className="text-muted">Vue consolidée du réseau de partenaires et des flux globaux.</p>
         </div>
-        <div style={{ display: 'flex', gap: '16px' }}>
+        <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+          <select 
+            className="filter-select"
+            value={timeRange}
+            onChange={(e) => setTimeRange(e.target.value)}
+            style={{ padding: '8px 12px', background: 'var(--color-bg)', fontWeight: 600 }}
+          >
+            <option value="all">Tout l'historique</option>
+            <option value="month">Ce mois (30j)</option>
+            <option value="quarter">Ce trimestre (90j)</option>
+            <option value="ytd">Depuis le 1er Janvier</option>
+          </select>
           <button className="btn btn-secondary" onClick={() => navigate('/admin/users')}>Gestion Partenaires</button>
-          <button className="btn btn-primary" onClick={() => navigate('/submit')}><PlusCircle size={18} /> Créer un lead manuellement</button>
+          <button className="btn btn-primary" onClick={() => navigate('/submit')}><PlusCircle size={18} /> Créer un lead</button>
         </div>
       </div>
 
@@ -97,23 +126,25 @@ function AdminDashboardView({ leads, partners, navigate }) {
       </div>
 
       <div className="dashboard-grid">
-        {/* Section Leaderboard */}
-        <div className="card dashboard-span-6 animate-fade-in" style={{ animationDelay: '200ms' }}>
+        {/* Section Leaderboard Complet */}
+        <div className="card dashboard-span-12 animate-fade-in" style={{ animationDelay: '200ms' }}>
           <div className="card-header" style={{ borderBottom: '1px solid var(--color-border)', paddingBottom: '16px' }}>
-            <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Trophy size={20} color="#F59E0B" /> Top 5 Partenaires</h3>
+            <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Trophy size={20} color="#F59E0B" /> Palmarès des Courtiers (Leaderboard)</h3>
           </div>
-          <div className="card-body" style={{ padding: '0' }}>
+          <div className="card-body" style={{ padding: '0', maxHeight: '400px', overflowY: 'auto' }}>
             <table className="table">
-              <thead>
+              <thead style={{ position: 'sticky', top: 0, background: 'var(--color-surface)', zIndex: 10 }}>
                 <tr>
                   <th>Courtier</th>
-                  <th>Leads</th>
-                  <th>Convertis</th>
-                  <th>Généré</th>
+                  <th>Leads Soumis</th>
+                  <th>Taux Conv.</th>
+                  <th>Délai Moyen</th>
+                  <th>Panier Moyen</th>
+                  <th>CA Généré</th>
                 </tr>
               </thead>
               <tbody>
-                {leaderboard.slice(0, 5).map((partner, index) => (
+                {leaderboard.map((partner, index) => (
                   <tr key={partner.id}>
                     <td>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -122,18 +153,23 @@ function AdminDashboardView({ leads, partners, navigate }) {
                       </div>
                     </td>
                     <td>{partner.leadCount}</td>
-                    <td>{partner.stats.convertedCount}</td>
+                    <td>
+                       <span style={{ color: partner.stats.conversionRate > 20 ? 'var(--color-green)' : 'var(--color-text)', fontWeight: 600 }}>{partner.stats.conversionRate}%</span>
+                       <div style={{ fontSize: '11px', color: 'var(--color-text-muted)' }}>{partner.stats.convertedCount} conv.</div>
+                    </td>
+                    <td>{partner.stats.avgConversionTimeDays > 0 ? `${partner.stats.avgConversionTimeDays} jours` : '-'}</td>
+                    <td>{formatCurrency(partner.stats.averageCart)}</td>
                     <td style={{ fontWeight: '600', color: 'var(--color-green)' }}>{formatCurrency(partner.stats.totalEarned)}</td>
                   </tr>
                 ))}
-                {leaderboard.length === 0 && <tr><td colSpan="4" className="text-center text-muted">Aucune donnée disponible.</td></tr>}
+                {leaderboard.length === 0 && <tr><td colSpan="6" className="text-center text-muted">Aucune donnée disponible.</td></tr>}
               </tbody>
             </table>
           </div>
         </div>
 
         {/* Inactive & Alertes */}
-        <div className="card dashboard-span-6 animate-fade-in" style={{ animationDelay: '300ms' }}>
+        <div className="card dashboard-span-12 animate-fade-in" style={{ animationDelay: '300ms' }}>
           <div className="card-header" style={{ borderBottom: '1px solid var(--color-border)', paddingBottom: '16px' }}>
              <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><AlertTriangle size={20} color="#ef4444" /> Partenaires Inactifs (0 Lead)</h3>
           </div>
@@ -165,8 +201,9 @@ function AdminDashboardView({ leads, partners, navigate }) {
       </div>
       
       <div className="dashboard-grid" style={{ marginTop: '24px' }}>
-        <PipelineChart />
-        <CommissionChart />
+        <PipelineChart leads={leads} className="dashboard-span-4" />
+        <ProductMixChart leads={leads} className="dashboard-span-4" />
+        <CommissionChart className="dashboard-span-4" />
       </div>
     </>
   );
