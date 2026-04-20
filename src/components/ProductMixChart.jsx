@@ -19,7 +19,7 @@ export default function ProductMixChart(props) {
       if (!productMap[type]) productMap[type] = { name: type, value: 0, volume: 0 };
       productMap[type].volume += 1;
       
-      const comm = lead.status === 'Converti' || lead.status === 'Payé' 
+      const comm = lead.status === 'CONVERTI' || lead.status === 'PAYE' 
           ? (lead.commissionAmount || 0) 
           : ((lead.estimatedPremium || 0) * (lead.commissionRate || 0) / 100);
       productMap[type].value += comm;

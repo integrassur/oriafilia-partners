@@ -64,12 +64,13 @@ export function generateId() {
  */
 export function getStatusClass(status) {
   const map = {
-    'Nouveau': 'status-nouveau',
-    'Contacté': 'status-contacte',
-    'Qualifié': 'status-qualifie',
-    'Devis envoyé': 'status-devis',
-    'Converti': 'status-converti',
-    'Perdu': 'status-perdu',
+    'NOUVEAU': 'status-nouveau',
+    'CONTACTE': 'status-contacte',
+    'QUALIFIE': 'status-qualifie',
+    'DEVIS ENVOYE': 'status-devis',
+    'CONVERTI': 'status-converti',
+    'PAYE': 'status-paye',
+    'PERDU': 'status-perdu',
   };
   return map[status] || 'status-nouveau';
 }
@@ -116,7 +117,7 @@ export function exportToCSV(leads, filename = 'leads_export.csv') {
  * Calculate commission stats for a set of leads
  */
 export function calcCommissionStats(leads) {
-  const converted = leads.filter(l => ['Converti', 'Payé'].includes(l.status));
+  const converted = leads.filter(l => ['CONVERTI', 'PAYE'].includes(l.status));
   const totalEarned = converted.reduce((sum, l) => sum + (l.commissionAmount || 0), 0);
   
   const now = new Date();
@@ -126,7 +127,7 @@ export function calcCommissionStats(leads) {
   });
   const thisMonthEarned = thisMonth.reduce((sum, l) => sum + (l.commissionAmount || 0), 0);
   
-  const pending = leads.filter(l => !['Converti', 'Payé', 'Perdu'].includes(l.status));
+  const pending = leads.filter(l => !['CONVERTI', 'PAYE', 'PERDU'].includes(l.status));
   const pendingEstimate = pending.reduce((sum, l) => {
     return sum + ((l.estimatedPremium || 0) * (l.commissionRate || 0) / 100);
   }, 0);

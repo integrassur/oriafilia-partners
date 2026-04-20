@@ -6,13 +6,13 @@ const LeadContext = createContext(null);
 
 // ── Status mapping DB ↔ Frontend ──────────────────────────────
 const DB_TO_FRONTEND_STATUS = {
-  'nouveau':      'Nouveau',
-  'contacte':     'Contacté',
-  'qualifie':     'Qualifié',
-  'devis_envoye': 'Devis envoyé',
-  'gagne':        'Converti',
-  'paye':         'Payé',
-  'perdu':        'Perdu',
+  'nouveau':      'NOUVEAU',
+  'contacte':     'CONTACTE',
+  'qualifie':     'QUALIFIE',
+  'devis_envoye': 'DEVIS ENVOYE',
+  'gagne':        'CONVERTI',
+  'paye':         'PAYE',
+  'perdu':        'PERDU',
 };
 
 const FRONTEND_TO_DB_STATUS = Object.fromEntries(
@@ -32,7 +32,7 @@ const mapFromDb = (dbLead) => ({
   commissionRate: Number(dbLead.commission_rate) || 0,
   commissionAmount: Number(dbLead.commission) || 0,
   partnerId: dbLead.partner_id,
-  status: DB_TO_FRONTEND_STATUS[dbLead.status] || 'Nouveau',
+  status: DB_TO_FRONTEND_STATUS[dbLead.status] || 'NOUVEAU',
   notes: dbLead.notes,
   createdAt: dbLead.created_at,
   updatedAt: dbLead.updated_at,
@@ -107,7 +107,7 @@ export function LeadProvider({ children }) {
   const addLead = async (leadData) => {
     if (!user) return;
     try {
-      const dbLead = mapToDb({ ...leadData, status: 'Nouveau' });
+      const dbLead = mapToDb({ ...leadData, status: 'NOUVEAU' });
       dbLead.partner_id = user.id;
 
       const { data, error } = await supabase
@@ -136,10 +136,10 @@ export function LeadProvider({ children }) {
         status: FRONTEND_TO_DB_STATUS[newStatus] || 'nouveau',
       };
 
-      if (newStatus === 'Converti' && commissionAmount !== null) {
+      if (newStatus === 'CONVERTI' && commissionAmount !== null) {
         updates.commission = commissionAmount;
       }
-      if (newStatus !== 'Converti') {
+      if (newStatus !== 'CONVERTI' && newStatus !== 'PAYE') {
         updates.commission = 0;
       }
 

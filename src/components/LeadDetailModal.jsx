@@ -67,7 +67,7 @@ export default function LeadDetailModal({ lead, onClose }) {
             <div className="detail-item">
               <span className="detail-label">Commission</span>
               <span className="detail-value commission-value">
-                {lead.status === 'Converti' ? formatCurrency(lead.commissionAmount) : 'En attente'}
+                {lead.status === 'CONVERTI' || lead.status === 'PAYE' ? formatCurrency(lead.commissionAmount) : 'En attente'}
               </span>
             </div>
             <div className="detail-item">

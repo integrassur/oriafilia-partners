@@ -6,12 +6,13 @@ import { useLeads } from '../context/LeadContext';
 import { STATUSES } from '../utils/seedData';
 
 const STATUS_COLORS = {
-  'Nouveau': '#3B82F6',
-  'Contacté': '#8B5CF6',
-  'Qualifié': '#F59E0B',
-  'Devis envoyé': '#EC4899',
-  'Converti': '#10B981',
-  'Perdu': '#EF4444',
+  'NOUVEAU': '#3B82F6',
+  'CONTACTE': '#8B5CF6',
+  'QUALIFIE': '#F59E0B',
+  'DEVIS ENVOYE': '#10B981',
+  'CONVERTI': '#14B8A6',
+  'PAYE': '#14B8A6',
+  'PERDU': '#EF4444'
 };
 
 export default function PipelineChart(props) {
