@@ -50,12 +50,7 @@ export function AuthProvider({ children }) {
         name: data.full_name || data.email.split('@')[0], // Fallback visuel
         status: data.status,
         joinedAt: data.created_at,
-        full_name: data.full_name,
-        phone: data.phone,
-        siret: data.siret,
-        iban: data.iban,
-        orias: data.orias,
-        address: data.address
+        full_name: data.full_name
       });
       
       // Si l'utilisateur est admin, on charge son carnet de partenaires
@@ -80,12 +75,7 @@ export function AuthProvider({ children }) {
         role: p.role,
         status: p.status,
         joinedAt: p.created_at,
-        full_name: p.full_name,
-        phone: p.phone,
-        siret: p.siret,
-        iban: p.iban,
-        orias: p.orias,
-        address: p.address
+        full_name: p.full_name
       }));
       setPartners(formatted);
     }

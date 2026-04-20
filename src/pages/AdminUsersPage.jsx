@@ -9,14 +9,14 @@ export default function AdminUsersPage() {
   const { user, partners, updateUserRole, togglePartnerStatus, resetPartnerPassword } = useAuth();
   const [roleChangeModal, setRoleChangeModal] = useState(null);
   const [selectedPartner, setSelectedPartner] = useState(null);
-  const [copiedIban, setCopiedIban] = useState(false);
+  const [statusFilter, setStatusFilter] = useState('all');
   const [newPassword, setNewPassword] = useState('');
   const [resetPasswordStatus, setResetPasswordStatus] = useState('');
   const [isTogglingStatus, setIsTogglingStatus] = useState(false);
 
   const isProfileComplete = (p) => {
     if (p.role === 'admin') return true;
-    return !!(p.full_name && p.phone && p.address && p.siret && p.orias && p.iban);
+    return !!(p.full_name);
   };
 
   const handleToggleStatus = async () => {
@@ -340,10 +340,7 @@ export default function AdminUsersPage() {
                </div>
 
                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-                 <div>
-                   <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', marginBottom: '6px', fontWeight: 600, letterSpacing: '0.05em' }}>Téléphone</div>
-                   <div style={{ fontSize: '0.95rem' }}>{selectedPartner.phone || <em className="text-muted">Non renseigné</em>}</div>
-                 </div>
+                 
                  <div>
                    <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', marginBottom: '6px', fontWeight: 600, letterSpacing: '0.05em' }}>Statut du compte</div>
                    <div style={{ fontSize: '0.95rem' }}>
@@ -353,10 +350,7 @@ export default function AdminUsersPage() {
                    </div>
                  </div>
                  
-                 <div style={{ gridColumn: '1 / -1' }}>
-                   <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', marginBottom: '6px', fontWeight: 600, letterSpacing: '0.05em' }}>Adresse Postale</div>
-                   <div style={{ fontSize: '0.95rem', lineHeight: 1.5 }}>{selectedPartner.address || <em className="text-muted">Non renseignée</em>}</div>
-                 </div>
+                 
                  
                  <div>
                    <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', marginBottom: '6px', fontWeight: 600, letterSpacing: '0.05em' }}>N° SIRET</div>
@@ -367,23 +361,7 @@ export default function AdminUsersPage() {
                    <div style={{ fontSize: '0.95rem', fontFamily: 'monospace' }}>{selectedPartner.orias || <em className="text-muted" style={{ fontFamily: 'var(--font-sans)' }}>Non renseigné</em>}</div>
                  </div>
                  
-                 <div style={{ gridColumn: '1 / -1', background: 'var(--color-bg)', padding: '20px', borderRadius: '12px', border: '1px solid var(--color-border)' }}>
-                   <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', marginBottom: '12px', fontWeight: 600, letterSpacing: '0.05em' }}>IBAN (Relevé d'Identité Bancaire)</div>
-                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.2)', padding: '12px 16px', borderRadius: '8px' }}>
-                     <code style={{ fontSize: '1rem', letterSpacing: '1px', wordBreak: 'break-all' }}>
-                       {selectedPartner.iban || <em className="text-muted" style={{ fontFamily: 'var(--font-sans)', letterSpacing: '0' }}>Non renseigné</em>}
-                     </code>
-                     {selectedPartner.iban && (
-                       <button className="btn btn-secondary btn-sm" onClick={() => {
-                         navigator.clipboard.writeText(selectedPartner.iban);
-                         setCopiedIban(true);
-                         setTimeout(() => setCopiedIban(false), 2000);
-                       }} style={{ flexShrink: 0, marginLeft: '12px' }}>
-                         {copiedIban ? <Check size={14} className="text-green" /> : <Copy size={14} />} Copier
-                       </button>
-                     )}
-                   </div>
-                 </div>
+                 
 
                  {/* Master Control Section */}
                  {selectedPartner.role !== 'admin' && (

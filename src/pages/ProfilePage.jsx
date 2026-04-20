@@ -10,12 +10,7 @@ export default function ProfilePage() {
   const stats = useMemo(() => calcCommissionStats(leads), [leads]);
 
   const [form, setForm] = useState({
-    full_name: '',
-    phone: '',
-    address: '',
-    siret: '',
-    orias: '',
-    iban: ''
+    full_name: ''
   });
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
@@ -23,12 +18,7 @@ export default function ProfilePage() {
   useEffect(() => {
     if (user) {
       setForm({
-        full_name: user.full_name || '',
-        phone: user.phone || '',
-        address: user.address || '',
-        siret: user.siret || '',
-        orias: user.orias || '',
-        iban: user.iban || ''
+        full_name: user.full_name || ''
       });
     }
   }, [user]);
@@ -37,8 +27,7 @@ export default function ProfilePage() {
     ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
     : '?';
 
-  const isProfileComplete = 
-    form.full_name && form.phone && form.address && form.siret && form.orias && form.iban;
+  const isProfileComplete = form.full_name;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,12 +36,7 @@ export default function ProfilePage() {
     
     // Nettoyage avant envoi
     const updates = {
-      full_name: form.full_name?.trim() || null,
-      phone: form.phone?.trim() || null,
-      address: form.address?.trim() || null,
-      siret: form.siret?.trim() || null,
-      orias: form.orias?.trim() || null,
-      iban: form.iban?.trim() || null
+      full_name: form.full_name?.trim() || null
     };
 
     const { error } = await updateProfile(updates);
@@ -72,7 +56,7 @@ export default function ProfilePage() {
         <div>
           <h2 className="section-title" style={{ margin: 0 }}>Mon Profil</h2>
           <p style={{ color: 'var(--color-text-muted)', marginTop: '4px', fontSize: '0.875rem' }}>
-            Gérez vos informations de compte et coordonnées réglementaires
+            Gérez vos informations de compte personnelles
           </p>
         </div>
       </div>
@@ -140,7 +124,7 @@ export default function ProfilePage() {
         {/* Colonne droite : Formulaire */}
         <div className="profile-card" style={{ padding: '32px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
-            <h2 style={{ fontSize: '1.25rem', color: 'var(--color-text)', margin: 0 }}>Informations Réglementaires</h2>
+            <h2 style={{ fontSize: '1.25rem', color: 'var(--color-text)', margin: 0 }}>Informations Personnelles</h2>
             {isProfileComplete ? (
               <span className="status-badge gagne" style={{ padding: '6px 12px', fontSize: '0.8rem', display: 'inline-flex', alignItems: 'center' }}>
                 <CheckCircle size={14} style={{ marginRight: '6px' }} /> Profil Complet
@@ -153,8 +137,8 @@ export default function ProfilePage() {
           </div>
 
           <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem', marginBottom: '32px', lineHeight: '1.5' }}>
-            Afin de pouvoir traiter vos leads et débloquer le paiement de vos commissions, 
-            veuillez renseigner l'ensemble de vos informations professionnelles et bancaires.
+            Afin de pouvoir traiter vos leads, 
+            veuillez renseigner votre nom complet. Les informations contractuelles figurent sur l'accord signé virtuellement.
           </p>
 
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -171,7 +155,7 @@ export default function ProfilePage() {
               </div>
             )}
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: '20px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: '20px' }}>
               <div className="form-group">
                 <label>Nom Complet (ou Raison Sociale) *</label>
                 <input 
@@ -179,72 +163,10 @@ export default function ProfilePage() {
                   className="form-input" 
                   value={form.full_name} 
                   onChange={e => setForm({...form, full_name: e.target.value})} 
-                  placeholder="Ex: Entreprise Courtiers SAS"
+                  placeholder="Ex: Jean Dupont"
                   required
                 />
               </div>
-              <div className="form-group">
-                <label>Numéro de Téléphone *</label>
-                <input 
-                  type="tel" 
-                  className="form-input" 
-                  value={form.phone} 
-                  onChange={e => setForm({...form, phone: e.target.value})} 
-                  placeholder="Ex: 06 12 34 56 78"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label>Adresse Postale *</label>
-              <textarea 
-                className="form-input" 
-                value={form.address} 
-                onChange={e => setForm({...form, address: e.target.value})} 
-                placeholder="Ex: 12 Rue de la Paix, 75002 Paris"
-                rows="2"
-                style={{ resize: 'vertical' }}
-                required
-              />
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: '20px' }}>
-              <div className="form-group">
-                <label>Numéro SIRET *</label>
-                <input 
-                  type="text" 
-                  className="form-input" 
-                  value={form.siret} 
-                  onChange={e => setForm({...form, siret: e.target.value})} 
-                  placeholder="Ex: 123 456 789 00012"
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label>Numéro ORIAS *</label>
-                <input 
-                  type="text" 
-                  className="form-input" 
-                  value={form.orias} 
-                  onChange={e => setForm({...form, orias: e.target.value})} 
-                  placeholder="Ex: 12345678"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label>Relevé d'Identité Bancaire (IBAN) *</label>
-              <input 
-                type="text" 
-                className="form-input" 
-                value={form.iban} 
-                onChange={e => setForm({...form, iban: e.target.value})} 
-                placeholder="Ex: FR76 1234 5678 9012 3456 7890 123"
-                style={{ fontFamily: 'monospace', letterSpacing: '1px', textTransform: 'uppercase' }}
-                required
-              />
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
