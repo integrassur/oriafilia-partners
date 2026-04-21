@@ -3,12 +3,41 @@ import Papa from 'papaparse';
 import { useLeads } from '../context/LeadContext';
 import { UploadCloud, CheckCircle, FileText, AlertCircle, Download, Infinity as InfinityIcon } from 'lucide-react';
 
+/**
+ * Normalize a CSV header string so accented characters, extra spaces,
+ * and casing mismatches do not break column detection.
+ * "Téléphone" → "telephone", "Prime estimée" → "prime estimee"
+ */
+const normalizeHeader = (h) =>
+  (h || '')
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')                      // decompose accents
+    .replace(/[\u0300-\u036f]/g, '')       // strip combining marks
+    .replace(/[^a-z0-9 ]/g, '')           // drop special chars
+    .replace(/\s+/g, ' ');                // collapse whitespace
+
+/**
+ * Given a raw CSV row (keyed by original headers) and an array of
+ * candidate header names, returns the first matching value or fallback.
+ */
+const pick = (row, normalizedMap, candidates, fallback = '') => {
+  for (const c of candidates) {
+    const norm = normalizeHeader(c);
+    const originalKey = normalizedMap[norm];
+    if (originalKey !== undefined && row[originalKey] !== undefined && row[originalKey] !== '') {
+      return row[originalKey];
+    }
+  }
+  return fallback;
+};
+
 export default function CsvImportBtn() {
   const { addLead } = useLeads();
   const fileInputRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
-  const [importResult, setImportResult] = useState(null); // { success: true/false, count: number, message: string }
+  const [importResult, setImportResult] = useState(null);
 
   const handleDrag = function(e) {
     e.preventDefault();
@@ -22,8 +51,7 @@ export default function CsvImportBtn() {
 
   const processFile = (file) => {
     if (!file) return;
-    
-    // Quick validation
+
     if (!file.name.endsWith('.csv')) {
        setImportResult({ success: false, message: "Le fichier doit être au format .csv" });
        return;
@@ -35,32 +63,62 @@ export default function CsvImportBtn() {
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
+      encoding: 'UTF-8',
       complete: async (results) => {
         try {
           const leadsToImport = results.data;
+          if (!leadsToImport || leadsToImport.length === 0) {
+            setImportResult({ success: false, message: "Le fichier CSV est vide ou ne contient aucune ligne valide." });
+            setLoading(false);
+            return;
+          }
+
+          // Build a normalised→original header map once from the first row keys
+          const originalHeaders = Object.keys(leadsToImport[0]);
+          const normalizedMap = {};
+          for (const oh of originalHeaders) {
+            normalizedMap[normalizeHeader(oh)] = oh;
+          }
+
           let imported = 0;
-          for (const row of leadsToImport) {
-            const contact = row['Contact'] || row['Nom'];
-            if (!contact) continue; // Skip invalid row
+          const errors = [];
+
+          for (let i = 0; i < leadsToImport.length; i++) {
+            const row = leadsToImport[i];
+            const contact = pick(row, normalizedMap, ['Contact', 'Nom', 'Name', 'contact', 'nom']);
+            if (!contact) continue; // skip rows without a contact name
 
             const leadData = {
               contactName: contact,
-              email: row['Email'] || '',
-              phone: row['Téléphone'] || row['Phone'] || '',
-              productType: row['Produit'] || row['Product'] || 'Autre',
-              situation: row['Situation'] || '',
-              source: row['Source'] || 'CSV Import',
-              estimatedPremium: parseFloat(row['Prime estimée']) || parseFloat(row['Premium']) || 0,
-              commissionRate: parseFloat(row['Commission (%)']) || 10,
-              notes: row['Notes'] || '',
+              email:           pick(row, normalizedMap, ['Email', 'email', 'E-mail', 'Mail']),
+              phone:           pick(row, normalizedMap, ['Téléphone', 'Telephone', 'Phone', 'Tel', 'phone'], '0000000000'),
+              productType:     pick(row, normalizedMap, ['Produit', 'Product', 'Type', 'produit'], 'Autre'),
+              situation:       pick(row, normalizedMap, ['Situation', 'situation']),
+              source:          pick(row, normalizedMap, ['Source', 'source'], 'CSV Import'),
+              estimatedPremium: parseFloat(pick(row, normalizedMap, ['Prime estimée', 'Prime estimee', 'Premium', 'prime estimee'], '0')) || 0,
+              commissionRate:   parseFloat(pick(row, normalizedMap, ['Commission (%)', 'Commission', 'commission', 'Taux'], '10')) || 10,
+              notes:           pick(row, normalizedMap, ['Notes', 'notes', 'Commentaire']),
             };
-            await addLead(leadData);
-            imported++;
+
+            try {
+              await addLead(leadData);
+              imported++;
+            } catch (err) {
+              console.error(`Erreur ligne ${i + 2}:`, err);
+              errors.push(`Ligne ${i + 2} (${contact}): ${err?.message || 'erreur inconnue'}`);
+            }
           }
-          setImportResult({ success: true, count: imported, message: "Leads importés avec succès." });
+
+          if (imported > 0 && errors.length === 0) {
+            setImportResult({ success: true, count: imported, message: "Leads importés avec succès." });
+          } else if (imported > 0 && errors.length > 0) {
+            setImportResult({ success: true, count: imported, message: `${imported} lead(s) importé(s), ${errors.length} erreur(s) : ${errors[0]}` });
+          } else {
+            setImportResult({ success: false, message: `Aucun lead importé. ${errors.length > 0 ? errors[0] : "Vérifiez que la colonne 'Contact' ou 'Nom' est présente."}` });
+          }
         } catch (error) {
           console.error("Erreur lors de l'import :", error);
-          setImportResult({ success: false, message: "Une erreur est survenue lors de l'enregistrement." });
+          setImportResult({ success: false, message: `Erreur d'enregistrement : ${error?.message || 'Vérifiez vos données et réessayez.'}` });
         } finally {
           setLoading(false);
         }
@@ -89,7 +147,9 @@ export default function CsvImportBtn() {
 
   const downloadTemplate = (e) => {
       e.stopPropagation();
-      const csvContent = "Contact,Email,Téléphone,Produit,Situation,Source,Prime estimée,Commission (%),Notes\nDupont Jean,jean@exemple.com,0600000000,Auto,Résilié,Site web,500,10,Option protection juridique";
+      // BOM (\uFEFF) ensures Excel/LibreOffice reads UTF-8 accents correctly
+      const BOM = '\uFEFF';
+      const csvContent = BOM + "Contact,Email,Téléphone,Produit,Situation,Source,Prime estimée,Commission (%),Notes\nDupont Jean,jean@exemple.com,0600000000,Auto,Résilié,Site web,500,10,Option protection juridique";
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -134,8 +194,9 @@ export default function CsvImportBtn() {
       </div>
 
       {importResult && !importResult.success && (
-          <div style={{ padding: '12px 16px', background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', borderRadius: '12px', border: '1px solid rgba(239, 68, 68, 0.2)', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <AlertCircle size={20} /> {importResult.message}
+          <div style={{ padding: '12px 16px', background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', borderRadius: '12px', border: '1px solid rgba(239, 68, 68, 0.2)', display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+              <AlertCircle size={20} style={{ flexShrink: 0 }} /> 
+              <span style={{ wordBreak: 'break-word' }}>{importResult.message}</span>
           </div>
       )}
 
