@@ -11,12 +11,17 @@ export default function LeadDetailModal({ lead, onClose }) {
   const { user } = useAuth();
   const [newStatus, setNewStatus] = useState(lead.status);
   const [adminNotes, setAdminNotes] = useState(lead.notes || '');
+  const [commissionAmount, setCommissionAmount] = useState(lead.commissionAmount || 0);
 
   if (!lead) return null;
 
   const handleStatusChange = () => {
-    if (newStatus !== lead.status) {
-      updateLeadStatus(lead.id, newStatus);
+    const isCommissionable = newStatus === 'CONVERTI' || newStatus === 'PAYE';
+    const statusChanged = newStatus !== lead.status;
+    const commissionChanged = isCommissionable && commissionAmount !== lead.commissionAmount;
+
+    if (statusChanged || commissionChanged) {
+      updateLeadStatus(lead.id, newStatus, isCommissionable ? commissionAmount : null);
     }
     if (user?.role === 'admin' && adminNotes !== lead.notes) {
       updateLead(lead.id, { notes: adminNotes });
@@ -101,23 +106,39 @@ export default function LeadDetailModal({ lead, onClose }) {
 
         {user?.role === 'admin' && (
           <div className="modal-footer">
-            <div className="status-select-group">
-              <label htmlFor="status-change">Changer le statut :</label>
-              <select
-                id="status-change"
-                className="filter-select"
-                value={newStatus}
-                onChange={(e) => setNewStatus(e.target.value)}
-              >
-                {STATUSES.map(s => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
+            <div className="status-select-group" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
+              <div>
+                <label htmlFor="status-change">Changer le statut :</label>
+                <select
+                  id="status-change"
+                  className="filter-select"
+                  value={newStatus}
+                  onChange={(e) => setNewStatus(e.target.value)}
+                >
+                  {STATUSES.map(s => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+              </div>
+
+              {(newStatus === 'CONVERTI' || newStatus === 'PAYE') && (
+                <div>
+                  <label htmlFor="commission-input">Commission (€) :</label>
+                  <input
+                    type="number"
+                    id="commission-input"
+                    className="form-input"
+                    value={commissionAmount}
+                    onChange={(e) => setCommissionAmount(Number(e.target.value))}
+                    style={{ width: '120px', marginLeft: '8px' }}
+                  />
+                </div>
+              )}
             </div>
             <button
               className="btn btn-primary btn-sm"
               onClick={handleStatusChange}
-              disabled={newStatus === lead.status && adminNotes === (lead.notes || '')}
+              disabled={newStatus === lead.status && adminNotes === (lead.notes || '') && (newStatus !== 'CONVERTI' && newStatus !== 'PAYE' || commissionAmount === lead.commissionAmount)}
               id="update-status-btn"
             >
               Mettre à jour

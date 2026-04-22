@@ -309,4 +309,4 @@ export const SEED_LEADS = [
 
 export const PRODUCT_TYPES = ['Auto', 'Moto', 'Habitation', 'Santé', 'Prévoyance', 'RC Pro'];
 export const SOURCES = ['Referral', 'Website', 'Event', 'Cold Call', 'Other'];
-export const STATUSES = ['NOUVEAU', 'CONTACTE', 'QUALIFIE', 'DEVIS ENVOYE', 'CONVERTI', 'PAYE', 'PERDU'];
+export const STATUSES = ['NOUVEAU', 'CONTACTE', 'FAUX NUMERO', 'QUALIFIE', 'CONVERTI', 'PAYE'];

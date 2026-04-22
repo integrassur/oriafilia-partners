@@ -66,11 +66,10 @@ export function getStatusClass(status) {
   const map = {
     'NOUVEAU': 'status-nouveau',
     'CONTACTE': 'status-contacte',
+    'FAUX NUMERO': 'status-perdu',
     'QUALIFIE': 'status-qualifie',
-    'DEVIS ENVOYE': 'status-devis',
     'CONVERTI': 'status-converti',
     'PAYE': 'status-paye',
-    'PERDU': 'status-perdu',
   };
   return map[status] || 'status-nouveau';
 }

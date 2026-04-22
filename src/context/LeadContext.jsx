@@ -9,8 +9,8 @@ const LeadContext = createContext(null);
 const DB_TO_FRONTEND_STATUS = {
   'nouveau':      'NOUVEAU',
   'contacte':     'CONTACTE',
+  'faux_numero':  'FAUX NUMERO',
   'qualifie':     'QUALIFIE',
-  'devis_envoye': 'DEVIS ENVOYE',
   'gagne':        'CONVERTI',
   'paye':         'PAYE',
   'perdu':        'PERDU',
@@ -75,9 +75,6 @@ export function LeadProvider({ children }) {
     }
 
     try {
-      // Grâce à RLS sur Supabase :
-      // - Si c'est l'admin, ça renverra TOUS les leads.
-      // - Si c'est un partenaire, ça ne renverra QUE ses leads.
       const { data, error } = await supabase
         .from('leads')
         .select('*')
@@ -92,12 +89,10 @@ export function LeadProvider({ children }) {
     }
   }, [user]);
 
-  // Charger les leads quand l'utilisateur change
   useEffect(() => {
     fetchLeads();
   }, [fetchLeads]);
 
-  // Côté frontend, on conserve juste le filtre visuel pour l'administrateur
   const leads = useMemo(() => {
     if (user?.role === 'admin' && adminPartnerFilter) {
       return allLeads.filter(l => l.partnerId === adminPartnerFilter);
@@ -137,7 +132,7 @@ export function LeadProvider({ children }) {
         status: FRONTEND_TO_DB_STATUS[newStatus] || 'nouveau',
       };
 
-      if (newStatus === 'CONVERTI' && commissionAmount !== null) {
+      if ((newStatus === 'CONVERTI' || newStatus === 'PAYE') && commissionAmount !== null) {
         updates.commission = commissionAmount;
       }
       if (newStatus !== 'CONVERTI' && newStatus !== 'PAYE') {
