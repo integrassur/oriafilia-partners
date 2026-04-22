@@ -85,19 +85,19 @@ export default function CsvImportBtn() {
 
           for (let i = 0; i < leadsToImport.length; i++) {
             const row = leadsToImport[i];
-            const contact = pick(row, normalizedMap, ['Contact', 'Nom', 'Name', 'contact', 'nom']);
+            const contact = pick(row, normalizedMap, ['NOM', 'CONTACT', 'Name', 'contact', 'nom']);
             if (!contact) continue; // skip rows without a contact name
 
             const leadData = {
               contactName: contact,
-              email:           pick(row, normalizedMap, ['Email', 'email', 'E-mail', 'Mail']),
-              phone:           pick(row, normalizedMap, ['Téléphone', 'Telephone', 'Phone', 'Tel', 'phone'], '0000000000'),
-              productType:     pick(row, normalizedMap, ['Produit', 'Product', 'Type', 'produit'], 'Autre'),
-              situation:       pick(row, normalizedMap, ['Situation', 'situation']),
-              source:          pick(row, normalizedMap, ['Source', 'source'], 'CSV Import'),
-              estimatedPremium: parseFloat(pick(row, normalizedMap, ['Prime estimée', 'Prime estimee', 'Premium', 'prime estimee'], '0')) || 0,
-              commissionRate:   parseFloat(pick(row, normalizedMap, ['Commission (%)', 'Commission', 'commission', 'Taux'], '10')) || 10,
-              notes:           pick(row, normalizedMap, ['Notes', 'notes', 'Commentaire']),
+              email:           pick(row, normalizedMap, ['EMAIL', 'Email', 'email', 'E-mail', 'Mail']),
+              phone:           pick(row, normalizedMap, ['TELEPHONE', 'Téléphone', 'Telephone', 'Phone', 'Tel', 'phone'], '0000000000'),
+              productType:     pick(row, normalizedMap, ['PRODUIT', 'Produit', 'Product', 'Type', 'produit'], 'Autre'),
+              situation:       pick(row, normalizedMap, ['SITUATION', 'Situation', 'situation']),
+              source:          pick(row, normalizedMap, ['SOURCE', 'Source', 'source'], 'CSV Import'),
+              estimatedPremium: parseFloat(pick(row, normalizedMap, ['PRIME_ESTIMEE', 'PRIME ESTIMEE', 'Prime estimée', 'Prime estimee', 'Premium', 'prime estimee'], '0')) || 0,
+              commissionRate:   parseFloat(pick(row, normalizedMap, ['COMMISSION', 'Commission (%)', 'Commission', 'commission', 'Taux'], '10')) || 10,
+              notes:           pick(row, normalizedMap, ['NOTES', 'Notes', 'notes', 'Commentaire']),
             };
 
             try {
@@ -149,7 +149,7 @@ export default function CsvImportBtn() {
       e.stopPropagation();
       // BOM (\uFEFF) ensures Excel/LibreOffice reads UTF-8 accents correctly
       const BOM = '\uFEFF';
-      const csvContent = BOM + "Contact,Email,Téléphone,Produit,Situation,Source,Prime estimée,Commission (%),Notes\nDupont Jean,jean@exemple.com,0600000000,Auto,Résilié,Site web,500,10,Option protection juridique";
+      const csvContent = BOM + "NOM,EMAIL,TELEPHONE,PRODUIT,SITUATION,SOURCE,PRIME_ESTIMEE,COMMISSION,NOTES\nDupont Jean,jean@exemple.com,0600000000,Auto,Résilié,Site web,500,10,Option protection juridique";
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -185,8 +185,8 @@ export default function CsvImportBtn() {
          </h4>
          <p style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)', marginBottom: '16px', lineHeight: '1.6' }}>
             Votre fichier doit comporter une en-tête avec au moins l'une des colonnes suivantes : 
-            <code style={{ background: 'rgba(0,0,0,0.2)', padding: '2px 6px', borderRadius: '4px', margin: '0 4px', color: '#38bdf8' }}>Contact</code> ou 
-            <code style={{ background: 'rgba(0,0,0,0.2)', padding: '2px 6px', borderRadius: '4px', margin: '0 4px', color: '#38bdf8' }}>Nom</code>.
+            <code style={{ background: 'rgba(0,0,0,0.2)', padding: '2px 6px', borderRadius: '4px', margin: '0 4px', color: '#38bdf8' }}>NOM</code> ou 
+            <code style={{ background: 'rgba(0,0,0,0.2)', padding: '2px 6px', borderRadius: '4px', margin: '0 4px', color: '#38bdf8' }}>CONTACT</code>.
          </p>
          <button className="btn btn-sm btn-outline" onClick={downloadTemplate} style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}>
              <Download size={16} /> Télécharger un modèle CSV
