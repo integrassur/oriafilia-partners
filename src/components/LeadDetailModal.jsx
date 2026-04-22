@@ -99,29 +99,31 @@ export default function LeadDetailModal({ lead, onClose }) {
           </div>
         </div>
 
-        <div className="modal-footer">
-          <div className="status-select-group">
-            <label htmlFor="status-change">Statut :</label>
-            <select
-              id="status-change"
-              className="filter-select"
-              value={newStatus}
-              onChange={(e) => setNewStatus(e.target.value)}
+        {user?.role === 'admin' && (
+          <div className="modal-footer">
+            <div className="status-select-group">
+              <label htmlFor="status-change">Changer le statut :</label>
+              <select
+                id="status-change"
+                className="filter-select"
+                value={newStatus}
+                onChange={(e) => setNewStatus(e.target.value)}
+              >
+                {STATUSES.map(s => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+            </div>
+            <button
+              className="btn btn-primary btn-sm"
+              onClick={handleStatusChange}
+              disabled={newStatus === lead.status && adminNotes === (lead.notes || '')}
+              id="update-status-btn"
             >
-              {STATUSES.map(s => (
-                <option key={s} value={s}>{s}</option>
-              ))}
-            </select>
+              Mettre à jour
+            </button>
           </div>
-          <button
-            className="btn btn-primary btn-sm"
-            onClick={handleStatusChange}
-            disabled={newStatus === lead.status && adminNotes === (lead.notes || '')}
-            id="update-status-btn"
-          >
-            Vérifier & Mettre à jour
-          </button>
-        </div>
+        )}
       </div>
     </div>
   );

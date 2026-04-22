@@ -1,0 +1,36 @@
+﻿NOM,EMAIL,TELEPHONE,PRODUIT,SITUATION,SOURCE,PRIME_ESTIMEE,COMMISSION,NOTES
+Corinne Muller,corinne.muller@exemple.fr,0790723023,Assurance Emprunteur,Retrait de permis,Site Web,672,15,Généré aléatoirement pour les tests.
+Catherine Lefevre,catherine.lefevre@exemple.fr,0700760868,Assurance Auto,Changement de situation,Salon Pro,431,20,Généré aléatoirement pour les tests.
+Pierre Robert,pierre.robert@exemple.fr,0752719869,RC Pro,Résilié non-paiement,Campagne Email,1204,20,Généré aléatoirement pour les tests.
+Cédric Garcia,cedric.garcia@exemple.fr,0763816239,RC Pro,Changement de situation,Salon Pro,718,20,Généré aléatoirement pour les tests.
+Jean Perrin,jean.perrin@exemple.fr,0714783359,Protection Juridique,Changement de situation,Recommandation,1580,15,Généré aléatoirement pour les tests.
+Daniel Henry,daniel.henry@exemple.fr,0789279136,Assurance Emprunteur,Retrait de permis,Site Web,829,15,Généré aléatoirement pour les tests.
+Alain Andre,alain.andre@exemple.fr,0749322029,Assurance Auto,Sinistralité élevée,Réseaux Sociaux,1164,25,Généré aléatoirement pour les tests.
+Isabelle Martin,isabelle.martin@exemple.fr,0690212233,RC Pro,Changement de situation,Campagne Email,1685,25,Généré aléatoirement pour les tests.
+Emilie Richard,emilie.richard@exemple.fr,0764054370,Prévoyance,Sinistralité élevée,Salon Pro,376,25,Généré aléatoirement pour les tests.
+Pascal Lefebvre,pascal.lefebvre@exemple.fr,0793266504,Mutuelle Santé,Sinistralité élevée,Recommandation,520,10,Généré aléatoirement pour les tests.
+Martine Michel,martine.michel@exemple.fr,0628256218,Mutuelle Santé,Jeune conducteur,Partenariat Courtier,1770,10,Généré aléatoirement pour les tests.
+Jacques Francois,jacques.francois@exemple.fr,0613359636,Protection Juridique,Sinistralité élevée,Recommandation,1759,15,Généré aléatoirement pour les tests.
+Sylvie Moreau,sylvie.moreau@exemple.fr,0702560650,Mutuelle Santé,Recherche d'économie,Salon Pro,1242,25,Généré aléatoirement pour les tests.
+Eric Laurent,eric.laurent@exemple.fr,0644103139,Prévoyance,Retrait de permis,Prospection Téléphonique,565,25,Généré aléatoirement pour les tests.
+Nicolas Garcia,nicolas.garcia@exemple.fr,0788514149,Assurance Habitation,Sinistralité élevée,Réseaux Sociaux,1057,15,Généré aléatoirement pour les tests.
+Pascal Moreau,pascal.moreau@exemple.fr,0689371225,Prévoyance,Recherche d'économie,Site Web,1264,25,Généré aléatoirement pour les tests.
+Marie Petit,marie.petit@exemple.fr,0784259141,Assurance Emprunteur,Création d'entreprise,Prospection Téléphonique,1233,10,Généré aléatoirement pour les tests.
+Eric Durand,eric.durand@exemple.fr,0782938567,Assurance Emprunteur,Recherche d'économie,Site Web,1409,15,Généré aléatoirement pour les tests.
+Véronique Garcia,veronique.garcia@exemple.fr,0683047446,Mutuelle Santé,Création d'entreprise,Prospection Téléphonique,1671,15,Généré aléatoirement pour les tests.
+Christian Simon,christian.simon@exemple.fr,0637614038,Mutuelle Santé,Changement de situation,Site Web,1206,25,Généré aléatoirement pour les tests.
+Alain Perrin,alain.perrin@exemple.fr,0714349413,Prévoyance,Résilié non-paiement,Prospection Téléphonique,641,10,Généré aléatoirement pour les tests.
+Nathalie Guerin,nathalie.guerin@exemple.fr,0703009088,Protection Juridique,Résilié non-paiement,Partenariat Courtier,1279,25,Généré aléatoirement pour les tests.
+Christine Lefevre,christine.lefevre@exemple.fr,0605972523,Mutuelle Santé,Changement de situation,Prospection Téléphonique,712,15,Généré aléatoirement pour les tests.
+Claude Durand,claude.durand@exemple.fr,0632499504,Prévoyance,Jeune conducteur,Site Web,370,25,Généré aléatoirement pour les tests.
+Philippe Bernard,philippe.bernard@exemple.fr,0753769745,Assurance Habitation,Création d'entreprise,Salon Pro,634,20,Généré aléatoirement pour les tests.
+Aurélie Andre,aurelie.andre@exemple.fr,0783562360,Assurance Habitation,Changement de situation,Réseaux Sociaux,1157,20,Généré aléatoirement pour les tests.
+Bernard Mercier,bernard.mercier@exemple.fr,0663370407,Assurance Emprunteur,Jeune conducteur,Site Web,544,10,Généré aléatoirement pour les tests.
+Alain Perrin,alain.perrin@exemple.fr,0653590298,Assurance Auto,Recherche d'économie,Recommandation,1505,10,Généré aléatoirement pour les tests.
+Sylvie Nicolas,sylvie.nicolas@exemple.fr,0727917613,Assurance Auto,Jeune conducteur,Salon Pro,1255,15,Généré aléatoirement pour les tests.
+Philippe Richard,philippe.richard@exemple.fr,0678086885,Assurance Emprunteur,Jeune conducteur,Réseaux Sociaux,344,20,Généré aléatoirement pour les tests.
+Luc Nicolas,luc.nicolas@exemple.fr,0700560705,Protection Juridique,Création d'entreprise,Partenariat Courtier,827,10,Généré aléatoirement pour les tests.
+Caroline Fournier,caroline.fournier@exemple.fr,0744034276,Prévoyance,Recherche d'économie,Réseaux Sociaux,1496,25,Généré aléatoirement pour les tests.
+Daniel Morin,daniel.morin@exemple.fr,0602310667,Assurance Habitation,Recherche d'économie,Site Web,1527,10,Généré aléatoirement pour les tests.
+Catherine Legrand,catherine.legrand@exemple.fr,0665303855,Assurance Auto,Jeune conducteur,Partenariat Courtier,1505,20,Généré aléatoirement pour les tests.
+Nathalie Faure,nathalie.faure@exemple.fr,0617682999,Assurance Habitation,Changement de situation,Prospection Téléphonique,1081,10,Généré aléatoirement pour les tests.
