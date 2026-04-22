@@ -24,7 +24,7 @@ export default function Sidebar() {
   return (
     <aside className="sidebar" id="sidebar-nav">
       <div className="sidebar-header">
-        <img src="/logo-oriafilia.png" alt="Oriafilia" className="sidebar-logo" />
+        <img src="/images/logo-dark.jpg" alt="Oriaffiliate" className="sidebar-logo" />
       </div>
 
       <nav className="sidebar-nav">
@@ -66,7 +66,7 @@ export default function Sidebar() {
       </nav>
 
       <div className="sidebar-footer">
-        <span className="sidebar-section-label">Oriafilia Partners v1.0</span>
+        <span className="sidebar-section-label">Oriaffiliate v1.0</span>
       </div>
     </aside>
   );

@@ -134,7 +134,7 @@ export default function InvitePage() {
         <CheckCircle size={48} style={{ margin: '0 auto 16px', color: 'var(--color-green)' }} />
         <h2 style={{ marginBottom: '12px' }}>Compte créé avec succès !</h2>
         <p style={{ color: 'var(--color-text-muted)', marginBottom: '8px' }}>
-          Bienvenue sur Oriafilia Partners.
+          Bienvenue sur Oriaffiliate.
         </p>
         <p style={{ color: 'var(--color-text-muted)', marginBottom: '24px', fontSize: '0.9rem' }}>
           Connectez-vous avec votre adresse e-mail <strong>{invitation?.email}</strong> et le mot de passe que vous venez de choisir.
