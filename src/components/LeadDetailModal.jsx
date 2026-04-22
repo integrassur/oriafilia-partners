@@ -16,7 +16,7 @@ export default function LeadDetailModal({ lead, onClose }) {
   if (!lead) return null;
 
   const handleStatusChange = () => {
-    const isCommissionable = newStatus === 'CONVERTI' || newStatus === 'PAYE';
+    const isCommissionable = newStatus === 'CONVERTI ET PAYE';
     const statusChanged = newStatus !== lead.status;
     const commissionChanged = isCommissionable && commissionAmount !== lead.commissionAmount;
 
@@ -72,7 +72,7 @@ export default function LeadDetailModal({ lead, onClose }) {
             <div className="detail-item">
               <span className="detail-label">Commission</span>
               <span className="detail-value commission-value">
-                {lead.status === 'CONVERTI' || lead.status === 'PAYE' ? formatCurrency(lead.commissionAmount) : 'En attente'}
+                {lead.status === 'CONVERTI ET PAYE' ? formatCurrency(lead.commissionAmount) : 'En attente'}
               </span>
             </div>
             <div className="detail-item">
@@ -121,7 +121,7 @@ export default function LeadDetailModal({ lead, onClose }) {
                 </select>
               </div>
 
-              {(newStatus === 'CONVERTI' || newStatus === 'PAYE') && (
+              {newStatus === 'CONVERTI ET PAYE' && (
                 <div>
                   <label htmlFor="commission-input">Commission (€) :</label>
                   <input
@@ -138,7 +138,7 @@ export default function LeadDetailModal({ lead, onClose }) {
             <button
               className="btn btn-primary btn-sm"
               onClick={handleStatusChange}
-              disabled={newStatus === lead.status && adminNotes === (lead.notes || '') && (newStatus !== 'CONVERTI' && newStatus !== 'PAYE' || commissionAmount === lead.commissionAmount)}
+              disabled={newStatus === lead.status && adminNotes === (lead.notes || '') && (newStatus !== 'CONVERTI ET PAYE' || commissionAmount === lead.commissionAmount)}
               id="update-status-btn"
             >
               Mettre à jour

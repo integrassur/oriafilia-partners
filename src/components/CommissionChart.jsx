@@ -20,7 +20,7 @@ export default function CommissionChart(props) {
     }
 
     leads
-      .filter(l => l.status === 'Converti' && l.commissionAmount > 0)
+      .filter(l => l.status === 'CONVERTI ET PAYE' && l.commissionAmount > 0)
       .forEach(lead => {
         const d = new Date(lead.updatedAt);
         const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;

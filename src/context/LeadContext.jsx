@@ -11,8 +11,8 @@ const DB_TO_FRONTEND_STATUS = {
   'contacte':     'CONTACTE',
   'faux_numero':  'FAUX NUMERO',
   'qualifie':     'QUALIFIE',
-  'gagne':        'CONVERTI',
-  'paye':         'PAYE',
+  'gagne':        'CONVERTI ET PAYE',
+  'paye':         'CONVERTI ET PAYE',
   'perdu':        'PERDU',
 };
 
@@ -132,10 +132,10 @@ export function LeadProvider({ children }) {
         status: FRONTEND_TO_DB_STATUS[newStatus] || 'nouveau',
       };
 
-      if ((newStatus === 'CONVERTI' || newStatus === 'PAYE') && commissionAmount !== null) {
+      if (newStatus === 'CONVERTI ET PAYE' && commissionAmount !== null) {
         updates.commission = commissionAmount;
       }
-      if (newStatus !== 'CONVERTI' && newStatus !== 'PAYE') {
+      if (newStatus !== 'CONVERTI ET PAYE') {
         updates.commission = 0;
       }
 

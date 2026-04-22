@@ -111,7 +111,7 @@ export default function AdminLeadsPage() {
     
     // Status update
     if (quickStatus !== quickEditLead.status || quickCommission !== quickEditLead.commissionAmount?.toString()) {
-      const commission = quickStatus === 'Converti' ? Number(quickCommission) || 0 : null;
+      const commission = quickStatus === 'CONVERTI ET PAYE' ? Number(quickCommission) || 0 : null;
       updateLeadStatus(quickEditLead.id, quickStatus, commission);
     }
     
@@ -260,7 +260,7 @@ export default function AdminLeadsPage() {
                       </div>
                     </td>
                     <td>
-                      {lead.status === 'Converti' ? (
+                      {lead.status === 'CONVERTI ET PAYE' ? (
                         <span className="commission-value">{formatCurrency(lead.commissionAmount)}</span>
                       ) : <span className="text-muted">—</span>}
                     </td>
@@ -296,7 +296,7 @@ export default function AdminLeadsPage() {
                              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', color: 'var(--color-text)' }}>
                                 <Users size={12} /> {getPartnerName(lead.partnerId)}
                              </div>
-                             {lead.status === 'Converti' && (
+                             {lead.status === 'CONVERTI ET PAYE' && (
                                <strong className="text-green" style={{ fontSize: '0.85rem' }}>{formatCurrency(lead.commissionAmount)}</strong>
                              )}
                           </div>
@@ -339,7 +339,7 @@ export default function AdminLeadsPage() {
                 </select>
               </div>
 
-              {quickStatus === 'Converti' && (
+              {quickStatus === 'CONVERTI ET PAYE' && (
                 <div className="form-group">
                   <label>Commission validée (€)</label>
                   <input type="number" className="form-input" value={quickCommission} onChange={(e) => setQuickCommission(e.target.value)} placeholder="Montant final de la commission" />

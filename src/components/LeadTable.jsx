@@ -168,7 +168,7 @@ export default function LeadTable({ onSelectLead }) {
                   <td>{lead.source}</td>
                   <td><StatusBadge status={lead.status} /></td>
                   <td>
-                    {lead.status === 'Converti' ? (
+                    {lead.status === 'CONVERTI ET PAYE' ? (
                       <span className="commission-value">{formatCurrency(lead.commissionAmount)}</span>
                     ) : (
                       <span style={{ color: 'var(--color-text-muted)' }}>—</span>

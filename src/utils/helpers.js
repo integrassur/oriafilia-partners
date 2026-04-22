@@ -68,8 +68,7 @@ export function getStatusClass(status) {
     'CONTACTE': 'status-contacte',
     'FAUX NUMERO': 'status-perdu',
     'QUALIFIE': 'status-qualifie',
-    'CONVERTI': 'status-converti',
-    'PAYE': 'status-paye',
+    'CONVERTI ET PAYE': 'status-converti',
   };
   return map[status] || 'status-nouveau';
 }
@@ -116,7 +115,7 @@ export function exportToCSV(leads, filename = 'leads_export.csv') {
  * Calculate commission stats for a set of leads
  */
 export function calcCommissionStats(leads) {
-  const converted = leads.filter(l => ['CONVERTI', 'PAYE'].includes(l.status));
+  const converted = leads.filter(l => l.status === 'CONVERTI ET PAYE');
   const totalEarned = converted.reduce((sum, l) => sum + (l.commissionAmount || 0), 0);
   
   const now = new Date();
@@ -126,7 +125,7 @@ export function calcCommissionStats(leads) {
   });
   const thisMonthEarned = thisMonth.reduce((sum, l) => sum + (l.commissionAmount || 0), 0);
   
-  const pending = leads.filter(l => !['CONVERTI', 'PAYE', 'PERDU'].includes(l.status));
+  const pending = leads.filter(l => !['CONVERTI ET PAYE', 'PERDU', 'FAUX NUMERO'].includes(l.status));
   const pendingEstimate = pending.reduce((sum, l) => {
     return sum + ((l.estimatedPremium || 0) * (l.commissionRate || 0) / 100);
   }, 0);

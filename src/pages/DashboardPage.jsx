@@ -14,7 +14,7 @@ import StatusBadge from '../components/StatusBadge';
 function PartnerDashboardView({ leads, user, navigate }) {
   const stats = useMemo(() => calcCommissionStats(leads), [leads]);
   const recentLeads = useMemo(() => [...leads].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)).slice(0, 5), [leads]);
-  const pendingCount = leads.filter(l => !['Converti', 'Perdu'].includes(l.status)).length;
+  const pendingCount = leads.filter(l => !['CONVERTI ET PAYE', 'FAUX NUMERO'].includes(l.status)).length;
 
   return (
     <>
@@ -53,7 +53,7 @@ function PartnerDashboardView({ leads, user, navigate }) {
             <div className="activity-list">
               {recentLeads.map(lead => (
                 <div key={lead.id} className="activity-item">
-                  <div className="activity-dot" style={{ background: lead.status === 'Converti' ? 'var(--color-converti)' : lead.status === 'Perdu' ? 'var(--color-perdu)' : 'var(--color-green)' }} />
+                  <div className="activity-dot" style={{ background: lead.status === 'CONVERTI ET PAYE' ? 'var(--color-converti)' : lead.status === 'FAUX NUMERO' ? 'var(--color-perdu)' : 'var(--color-green)' }} />
                   <div className="activity-text">
                     <strong>{lead.contactName}</strong> — {lead.productType}
                     <div style={{ marginTop: '4px' }}><StatusBadge status={lead.status} /></div>

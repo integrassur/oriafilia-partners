@@ -14,12 +14,12 @@ function AdminCommissionsView({ leads, partners, updateLeadStatus }) {
 
   const unpaidLeads = useMemo(() => {
     return leads
-      .filter(l => l.status === 'Converti' && l.commissionAmount > 0)
+      .filter(l => l.status === 'CONVERTI ET PAYE' && l.commissionAmount === 0)
       .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
   }, [leads]);
 
   const paidLeads = useMemo(() => {
-    return leads.filter(l => l.status === 'Payé');
+    return leads.filter(l => l.status === 'CONVERTI ET PAYE' && l.commissionAmount > 0);
   }, [leads]);
 
   const totalUnpaid = unpaidLeads.reduce((acc, l) => acc + (l.commissionAmount || 0), 0);
@@ -69,7 +69,7 @@ function AdminCommissionsView({ leads, partners, updateLeadStatus }) {
     
     // 2. Mark as Paid (Wait slightly to ensure download starts)
     for (const id of selectedIds) {
-      await updateLeadStatus(id, 'Payé');
+      await updateLeadStatus(id, 'CONVERTI ET PAYE');
     }
     
     setSelectedIds(new Set());
@@ -163,8 +163,8 @@ function AdminCommissionsView({ leads, partners, updateLeadStatus }) {
 }
 
 function PartnerCommissionsView({ leads, stats }) {
-  const convertedLeads = useMemo(() => leads.filter(l => l.status === 'Converti' || l.status === 'Payé').sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)), [leads]);
-  const pendingLeads = useMemo(() => leads.filter(l => !['Converti', 'Payé', 'Perdu'].includes(l.status)).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)), [leads]);
+  const convertedLeads = useMemo(() => leads.filter(l => l.status === 'CONVERTI ET PAYE').sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)), [leads]);
+  const pendingLeads = useMemo(() => leads.filter(l => !['CONVERTI ET PAYE', 'FAUX NUMERO'].includes(l.status)).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)), [leads]);
 
   return (
     <div className="animate-fade-in">
@@ -201,12 +201,12 @@ function PartnerCommissionsView({ leads, stats }) {
               <div className="activity-list">
                 {convertedLeads.map(lead => (
                   <div key={lead.id} className="activity-item">
-                    <div className="activity-dot" style={{ background: lead.status === 'Payé' ? 'var(--color-green)' : 'var(--color-converti)' }} />
+                    <div className="activity-dot" style={{ background: lead.commissionAmount > 0 ? 'var(--color-green)' : 'var(--color-converti)' }} />
                     <div className="activity-text">
                       <strong>{lead.contactName}</strong> — {lead.productType}
                       <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginTop: '4px', fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
                         <span>{lead.commissionRate}% sur {formatCurrency(lead.estimatedPremium)}</span>
-                        {lead.status === 'Payé' && <span style={{ background: 'var(--color-green-bg)', color: 'var(--color-green)', padding: '2px 6px', borderRadius: '4px', fontWeight: 600 }}>Payé</span>}
+                        {lead.commissionAmount > 0 && <span style={{ background: 'var(--color-green-bg)', color: 'var(--color-green)', padding: '2px 6px', borderRadius: '4px', fontWeight: 600 }}>Payé</span>}
                       </div>
                     </div>
                     <span className="commission-value" style={{ fontSize: '0.875rem' }}>{formatCurrency(lead.commissionAmount)}</span>
