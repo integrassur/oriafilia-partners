@@ -24,7 +24,7 @@ export default function Sidebar() {
   return (
     <aside className="sidebar" id="sidebar-nav">
       <div className="sidebar-header">
-        <img src="/images/logo-dark.jpg" alt="Oriaffiliate" className="sidebar-logo" />
+        <img src="/images/logo-gold.jpg" alt="Oriaffiliate" className="sidebar-logo" />
       </div>
 
       <nav className="sidebar-nav">

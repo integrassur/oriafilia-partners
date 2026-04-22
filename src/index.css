@@ -253,12 +253,20 @@ img { max-width: 100%; height: auto; }
   align-items: center;
   justify-content: center;
   gap: var(--space-sm);
-  margin-bottom: var(--space-xs);
+  margin-bottom: var(--space-lg);
 }
 
 .login-logo img {
-  height: 44px;
+  height: 100px;
   width: auto;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px rgba(196, 163, 68, 0.3), 0 0 0 1px rgba(196, 163, 68, 0.15);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.login-logo img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 40px rgba(196, 163, 68, 0.45), 0 0 0 1px rgba(196, 163, 68, 0.25);
 }
 
 .login-subtitle {
@@ -486,18 +494,25 @@ img { max-width: 100%; height: auto; }
 }
 
 .sidebar-header {
-  padding: var(--space-lg) var(--space-lg);
+  padding: var(--space-lg);
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
+  justify-content: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  min-height: var(--header-height);
+  min-height: 100px;
 }
 
 .sidebar-logo {
-  height: 36px;
+  height: 64px;
   width: auto;
-  filter: none;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 20px rgba(196, 163, 68, 0.25);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.sidebar-logo:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 28px rgba(196, 163, 68, 0.4);
 }
 
 .sidebar-nav {

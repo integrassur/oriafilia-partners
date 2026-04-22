@@ -25,7 +25,7 @@ export default function LoginPage() {
     <div className="login-page">
       <div className="login-card">
         <div className="login-logo">
-          <img src="/images/logo-dark.jpg" alt="Oriaffiliate" />
+          <img src="/images/logo-gold.jpg" alt="Oriaffiliate" />
         </div>
 
         <p className="login-subtitle">Espace Partenaires — Connectez-vous à votre tableau de bord</p>
