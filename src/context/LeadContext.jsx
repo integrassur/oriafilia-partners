@@ -16,9 +16,15 @@ const DB_TO_FRONTEND_STATUS = {
   'perdu':        'PERDU',
 };
 
-const FRONTEND_TO_DB_STATUS = Object.fromEntries(
-  Object.entries(DB_TO_FRONTEND_STATUS).map(([k, v]) => [v, k])
-);
+// Reverse mapping – force 'CONVERTI ET PAYE' → 'gagne' (value accepted by CHECK constraint)
+const FRONTEND_TO_DB_STATUS = {
+  'NOUVEAU':          'nouveau',
+  'CONTACTE':         'contacte',
+  'FAUX NUMERO':      'faux_numero',
+  'QUALIFIE':         'qualifie',
+  'CONVERTI ET PAYE': 'gagne',
+  'PERDU':            'perdu',
+};
 
 // ── Data mapping helpers ──────────────────────────────────────
 const mapFromDb = (dbLead) => ({

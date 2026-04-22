@@ -69,7 +69,7 @@ CREATE TABLE public.leads (
   commission numeric DEFAULT 0,
   partner_id uuid REFERENCES public.profiles(id) NOT NULL,
   status text NOT NULL CHECK (status IN (
-    'nouveau', 'contacte', 'qualifie', 'devis_envoye', 'gagne', 'perdu'
+    'nouveau', 'contacte', 'faux_numero', 'qualifie', 'gagne', 'paye', 'perdu'
   )) DEFAULT 'nouveau',
   notes text,
   created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL,
