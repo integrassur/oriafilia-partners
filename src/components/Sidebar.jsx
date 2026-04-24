@@ -1,4 +1,6 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
+import Logo from './Logo';
+
 import {
   LayoutDashboard,
   PlusCircle,
@@ -20,11 +22,18 @@ const navItems = [
 
 export default function Sidebar() {
   const { user } = useAuth();
+  const location = useLocation();
+  const isHome = location.pathname === '/';
 
   return (
     <aside className="sidebar" id="sidebar-nav">
-      <div className="sidebar-header">
-        <img src="/images/logo-gold.jpg" alt="Oriaffiliate" className="sidebar-logo" />
+      <div className="sidebar-header" style={{ 
+        padding: isHome ? 'var(--space-xl) var(--space-lg)' : 'var(--space-lg)',
+        transition: 'all var(--transition-slow)'
+      }}>
+        <div className="sidebar-logo-container">
+          <Logo size={isHome ? 'lg' : 'md'} />
+        </div>
       </div>
 
       <nav className="sidebar-nav">
@@ -66,7 +75,7 @@ export default function Sidebar() {
       </nav>
 
       <div className="sidebar-footer">
-        <span className="sidebar-section-label">Oriaffiliate v1.0</span>
+        <span className="sidebar-section-label">ORIAFFILIA v1.0</span>
       </div>
     </aside>
   );

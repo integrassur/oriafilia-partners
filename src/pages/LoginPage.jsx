@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import Logo from '../components/Logo';
 
 export default function LoginPage() {
   const { login, error } = useAuth();
@@ -25,7 +26,7 @@ export default function LoginPage() {
     <div className="login-page">
       <div className="login-card">
         <div className="login-logo">
-          <img src="/images/logo-gold.jpg" alt="Oriaffiliate" />
+          <Logo iconOnly size="xl" />
         </div>
 
         <p className="login-subtitle">Espace Partenaires — Connectez-vous à votre tableau de bord</p>

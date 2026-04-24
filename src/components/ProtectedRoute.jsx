@@ -14,7 +14,7 @@ export default function ProtectedRoute({ children }) {
           <AlertCircle size={48} style={{ margin: '0 auto 16px', color: '#ef4444' }} />
           <h2 style={{ marginBottom: '12px' }}>Compte suspendu</h2>
           <p style={{ color: 'var(--color-text-muted)', marginBottom: '24px' }}>
-            Votre accès à Oriaffiliate a été temporairement suspendu par un administrateur. Veuillez contacter le support.
+            Votre accès à ORIAFFILIA a été temporairement suspendu par un administrateur. Veuillez contacter le support.
           </p>
           <button className="btn btn-secondary" onClick={() => logout()}>Se déconnecter</button>
         </div>

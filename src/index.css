@@ -255,21 +255,20 @@ img { max-width: 100%; height: auto; }
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-sm);
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-xl);
 }
 
-.login-logo img {
-  height: 100px;
-  width: auto;
-  border-radius: var(--radius-lg);
-  box-shadow: 0 8px 32px rgba(196, 163, 68, 0.3), 0 0 0 1px rgba(196, 163, 68, 0.15);
-  transition: transform var(--transition-base), box-shadow var(--transition-base);
+.oriaffilia-logo {
+  transition: transform var(--transition-base);
 }
 
-.login-logo img:hover {
-  transform: scale(1.05);
-  box-shadow: 0 12px 40px rgba(196, 163, 68, 0.45), 0 0 0 1px rgba(196, 163, 68, 0.25);
+.oriaffilia-logo:hover .logo-icon {
+  transform: scale(1.05) rotate(-2deg);
+  box-shadow: 0 8px 24px rgba(16, 194, 126, 0.4);
+}
+
+.logo-icon {
+  transition: all var(--transition-base);
 }
 
 .login-subtitle {
@@ -505,17 +504,11 @@ img { max-width: 100%; height: auto; }
   min-height: 100px;
 }
 
-.sidebar-logo {
-  height: 64px;
-  width: auto;
-  border-radius: var(--radius-md);
-  box-shadow: 0 4px 20px rgba(196, 163, 68, 0.25);
-  transition: transform var(--transition-base), box-shadow var(--transition-base);
-}
-
-.sidebar-logo:hover {
-  transform: scale(1.08);
-  box-shadow: 0 6px 28px rgba(196, 163, 68, 0.4);
+.sidebar-logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 .sidebar-nav {

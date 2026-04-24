@@ -13,7 +13,7 @@ const pageTitles = {
 export default function Header() {
   const { user, logout } = useAuth();
   const location = useLocation();
-  const title = pageTitles[location.pathname] || 'Oriaffiliate';
+  const title = pageTitles[location.pathname] || 'ORIAFFILIA';
 
   const initials = user?.name
     ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
