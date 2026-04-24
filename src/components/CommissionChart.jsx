@@ -35,12 +35,12 @@ export default function CommissionChart(props) {
   }, [leads]);
 
   return (
-    <div className={`card animate-fade-in ${props.className || 'dashboard-span-6'}`}>
+    <div className={`card animate-fade-in ${props.className || ''}`}>
       <div className="card-header">
         <h3>Commissions (6 mois)</h3>
       </div>
       <div className="card-body">
-        <ResponsiveContainer width="100%" height={260}>
+        <ResponsiveContainer width="100%" height={280}>
           <AreaChart data={data} margin={{ top: 5, right: 5, bottom: 5, left: -15 }}>
             <defs>
               <linearGradient id="commGradient" x1="0" y1="0" x2="0" y2="1">
@@ -81,8 +81,8 @@ export default function CommissionChart(props) {
               stroke="#10C27E"
               strokeWidth={2.5}
               fill="url(#commGradient)"
-              dot={{ fill: '#10C27E', r: 4, strokeWidth: 2, stroke: '#fff' }}
-              activeDot={{ r: 6, strokeWidth: 2, stroke: '#fff' }}
+              dot={{ fill: '#10C27E', r: 4, strokeWidth: 2, stroke: 'var(--color-surface)' }}
+              activeDot={{ r: 6, strokeWidth: 2, stroke: 'var(--color-surface)' }}
             />
           </AreaChart>
         </ResponsiveContainer>

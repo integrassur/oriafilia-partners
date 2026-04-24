@@ -125,7 +125,7 @@ function AdminDashboardView({ leads: allLeads, partners, navigate }) {
         <KPICard icon={Users} label="Partenaires Actifs" value={activePartners} accentColor="#0ea5e9" bgColor="rgba(14, 165, 233, 0.1)" delay={4} />
       </div>
 
-      <div className="dashboard-grid">
+      <div className="admin-dashboard-grid">
         {/* Section Leaderboard Complet */}
         <div className="card dashboard-span-12 animate-fade-in" style={{ animationDelay: '200ms' }}>
           <div className="card-header" style={{ borderBottom: '1px solid var(--color-border)', paddingBottom: '16px' }}>
@@ -200,7 +200,7 @@ function AdminDashboardView({ leads: allLeads, partners, navigate }) {
         </div>
       </div>
       
-      <div className="dashboard-grid" style={{ marginTop: '24px' }}>
+      <div className="admin-dashboard-grid" style={{ marginTop: '24px' }}>
         <PipelineChart leads={leads} className="dashboard-span-4" />
         <ProductMixChart leads={leads} className="dashboard-span-4" />
         <CommissionChart className="dashboard-span-4" />

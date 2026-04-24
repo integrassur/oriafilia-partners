@@ -9,7 +9,7 @@
   gap: var(--space-xl);
 }
 
-.dashboard-grid {
+.admin-dashboard-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: var(--space-lg);
@@ -29,7 +29,8 @@
 }
 
 @media (max-width: 1024px) {
-  .dashboard-span-8, .dashboard-span-4 {
+  .admin-dashboard-grid .dashboard-span-8,
+  .admin-dashboard-grid .dashboard-span-4 {
     grid-column: span 12;
   }
 }
