@@ -91,7 +91,7 @@ export default function LeadDetailModal({ lead, onClose }) {
                 />
               ) : (
                 <span className="detail-value" style={{ 
-                  backgroundColor: 'var(--color-bg-secondary)', 
+                  backgroundColor: 'var(--color-bg)', 
                   padding: '12px', 
                   borderRadius: '6px', 
                   display: 'block',

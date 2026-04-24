@@ -1,5 +1,5 @@
 import { useAuth } from '../context/AuthContext';
-import { LogOut, Bell } from 'lucide-react';
+import { LogOut, Bell, Menu } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 
 const pageTitles = {
@@ -19,9 +19,16 @@ export default function Header() {
     ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
     : '?';
 
+  const toggleSidebar = () => {
+    document.querySelector('.sidebar')?.classList.toggle('open');
+  };
+
   return (
     <header className="header" id="header-bar">
       <div className="header-left">
+        <button className="sidebar-toggle" onClick={toggleSidebar} title="Menu" id="sidebar-toggle-btn">
+          <Menu size={22} />
+        </button>
         <h1>{title}</h1>
       </div>
 

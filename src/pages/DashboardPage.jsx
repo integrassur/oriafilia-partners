@@ -132,7 +132,7 @@ function AdminDashboardView({ leads: allLeads, partners, navigate }) {
             <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Trophy size={20} color="#F59E0B" /> Palmarès des Courtiers (Leaderboard)</h3>
           </div>
           <div className="card-body" style={{ padding: '0', maxHeight: '400px', overflowY: 'auto' }}>
-            <table className="table">
+            <table className="data-table">
               <thead style={{ position: 'sticky', top: 0, background: 'var(--color-surface)', zIndex: 10 }}>
                 <tr>
                   <th>Courtier</th>
@@ -174,7 +174,7 @@ function AdminDashboardView({ leads: allLeads, partners, navigate }) {
              <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><AlertTriangle size={20} color="#ef4444" /> Partenaires Inactifs (0 Lead)</h3>
           </div>
           <div className="card-body" style={{ padding: '0' }}>
-             <table className="table">
+             <table className="data-table">
               <thead>
                 <tr>
                   <th>Courtier</th>
@@ -193,7 +193,7 @@ function AdminDashboardView({ leads: allLeads, partners, navigate }) {
                     </td>
                   </tr>
                 ))}
-                {leaderboard.filter(p => p.leadCount === 0).length === 0 && <tr><td colSpan="2" className="text-center text-muted">Aun partenaire inactif.</td></tr>}
+                {leaderboard.filter(p => p.leadCount === 0).length === 0 && <tr><td colSpan="2" className="text-center text-muted">Aucun partenaire inactif.</td></tr>}
               </tbody>
              </table>
           </div>
