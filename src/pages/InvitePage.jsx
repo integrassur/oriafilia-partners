@@ -16,10 +16,7 @@ export default function InvitePage() {
   useEffect(() => {
     async function checkToken() {
       const { data, error } = await supabase
-        .from('invitations')
-        .select('*')
-        .eq('token', token)
-        .single();
+        .rpc('verify_invitation', { p_token: token });
 
       if (error || !data) { setStep('expired'); return; }
       if (data.used_at) { setStep('used'); return; }

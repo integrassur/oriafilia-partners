@@ -31,8 +31,8 @@ export default function Sidebar() {
         padding: isHome ? 'var(--space-xl) var(--space-lg)' : 'var(--space-lg)',
         transition: 'all var(--transition-slow)'
       }}>
-        <div className="sidebar-logo-container">
-          <Logo size={isHome ? 'lg' : 'md'} />
+        <div className="sidebar-logo-container" style={{ display: 'flex', justifyContent: 'center' }}>
+          <Logo size={isHome ? 'xl' : 'md'} stacked={isHome} />
         </div>
       </div>
 
