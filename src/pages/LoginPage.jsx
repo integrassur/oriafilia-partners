@@ -26,10 +26,11 @@ export default function LoginPage() {
     <div className="login-page">
       <div className="login-card">
         <div className="login-logo">
-          <Logo iconOnly size="xl" />
+          <Logo iconOnly size="xxl" variant="dark" />
         </div>
 
-        <p className="login-subtitle">Espace Partenaires — Connectez-vous à votre tableau de bord</p>
+        <h1 className="login-title">Oriaffilia Partners</h1>
+        <p className="login-subtitle">Connectez-vous à votre espace partenaire</p>
 
         {error && <div className="login-error">{error}</div>}
 

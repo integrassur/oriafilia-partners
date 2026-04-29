@@ -2,20 +2,32 @@ import React from 'react';
 
 /**
  * Premium Logo Component for Oriaffilia
+ * Uses the actual brand logo image (gold A icon)
+ * 
  * @param {Object} props
- * @param {boolean} props.iconOnly - If true, only show the OA icon
- * @param {string} props.size - 'sm', 'md', 'lg', 'xl'
- * @param {string} props.className - Additional classes
+ * @param {boolean} props.iconOnly - If true, only show the icon (no text)
+ * @param {string} props.size - 'sm', 'md', 'lg', 'xl', 'xxl'
+ * @param {boolean} props.stacked - If true, icon and text are stacked vertically
+ * @param {string} props.variant - 'dark' (default, gold on dark), 'white' (gold on white), 'gold' (white on gold)
+ * @param {string} props.className - Additional CSS classes
  */
-export default function Logo({ iconOnly = false, size = 'md', stacked = false, className = '' }) {
+export default function Logo({ iconOnly = false, size = 'md', stacked = false, variant = 'dark', className = '' }) {
   const sizes = {
-    sm: { icon: '32px', font: '14px', gap: '8px' },
-    md: { icon: '42px', font: '18px', gap: '10px' },
-    lg: { icon: '56px', font: '24px', gap: '14px' },
-    xl: { icon: '80px', font: '32px', gap: '20px' },
+    sm:  { icon: '32px', font: '14px', gap: '8px' },
+    md:  { icon: '42px', font: '18px', gap: '10px' },
+    lg:  { icon: '56px', font: '24px', gap: '14px' },
+    xl:  { icon: '80px', font: '32px', gap: '20px' },
+    xxl: { icon: '120px', font: '40px', gap: '24px' },
+  };
+
+  const variantSrc = {
+    dark: '/images/logo-dark.jpg',
+    white: '/images/logo-white.jpg',
+    gold: '/images/logo-gold.jpg',
   };
 
   const currentSize = sizes[size] || sizes.md;
+  const imgSrc = variantSrc[variant] || variantSrc.dark;
 
   return (
     <div className={`oriaffilia-logo ${className}`} style={{ 
@@ -26,20 +38,20 @@ export default function Logo({ iconOnly = false, size = 'md', stacked = false, c
       gap: currentSize.gap,
       userSelect: 'none'
     }}>
-      {/* Image Icon (cropped to remove text) */}
-      <div className="logo-icon" style={{
-        width: currentSize.icon,
-        height: currentSize.icon,
-        backgroundImage: "url('/logo-oriafilia.png')",
-        backgroundSize: "150%", // Zoom in to hide the text below
-        backgroundPosition: "center 15%", // Focus on the shield icon at the top
-        backgroundColor: "#ffffff", // Ensure contrast for the logo
-        backgroundRepeat: "no-repeat",
-        borderRadius: size === 'xl' ? '18px' : '10px',
-        flexShrink: 0,
-        boxShadow: '0 4px 15px rgba(0, 0, 0, 0.3)',
-        border: '1px solid rgba(255, 255, 255, 0.1)'
-      }} />
+      {/* Brand Logo Image */}
+      <img
+        src={imgSrc}
+        alt="Oriaffilia"
+        className="logo-icon"
+        style={{
+          width: currentSize.icon,
+          height: currentSize.icon,
+          borderRadius: size === 'xxl' ? '20px' : size === 'xl' ? '16px' : '10px',
+          objectFit: 'cover',
+          flexShrink: 0,
+          boxShadow: '0 4px 15px rgba(0, 0, 0, 0.3)',
+        }}
+      />
 
       {/* Text Part */}
       {!iconOnly && (

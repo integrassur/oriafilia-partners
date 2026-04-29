@@ -32,7 +32,7 @@ export default function Sidebar() {
         transition: 'all var(--transition-slow)'
       }}>
         <div className="sidebar-logo-container" style={{ display: 'flex', justifyContent: 'center' }}>
-          <Logo size={isHome ? 'xl' : 'md'} stacked={isHome} />
+          <Logo size={isHome ? 'xl' : 'md'} stacked={isHome} variant="dark" />
         </div>
       </div>
 

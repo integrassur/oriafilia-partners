@@ -255,7 +255,7 @@ img { max-width: 100%; height: auto; }
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-lg);
 }
 
 .oriaffilia-logo {
@@ -264,16 +264,26 @@ img { max-width: 100%; height: auto; }
 
 .oriaffilia-logo:hover .logo-icon {
   transform: scale(1.05) rotate(-2deg);
-  box-shadow: 0 8px 24px rgba(16, 194, 126, 0.4);
+  box-shadow: 0 8px 24px rgba(196, 163, 68, 0.4);
 }
 
 .logo-icon {
   transition: all var(--transition-base);
 }
 
+.login-title {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-text);
+  margin-bottom: var(--space-xs);
+  font-family: var(--font-heading);
+  letter-spacing: 0.02em;
+}
+
 .login-subtitle {
   text-align: center;
-  color: var(--color-text-secondary);
+  color: var(--color-text-muted);
   font-size: 0.875rem;
   margin-bottom: var(--space-xl);
   font-weight: 400;
@@ -1467,8 +1477,13 @@ img { max-width: 100%; height: auto; }
     width: 100%;
     justify-content: center;
   }
-  .login-logo img {
-    height: 80px;
+  .login-logo .logo-icon {
+    width: 80px !important;
+    height: 80px !important;
+    border-radius: 14px !important;
+  }
+  .login-title {
+    font-size: 1.25rem;
   }
   .login-card {
     padding: var(--space-lg) var(--space-md);
